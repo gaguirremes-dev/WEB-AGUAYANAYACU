@@ -1,0 +1,1408 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agua Yana Yacu - El Agua que Enamora | Agua de Mesa Premium Perú</title>
+    <meta name="description" content="Agua Yana Yacu, el agua que enamora. Líneas Essential pH 6.0, Premium Alcalina pH 8.5+ y Performance Hidratantes. Distribuidores en Perú. RUC 20615455262.">
+    <meta name="keywords" content="agua de mesa, agua alcalina, agua yana yacu, agua premium perú, hidratantes electrolitos">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- GSAP CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: {
+                            deep:  '#0A1540',
+                            mid:   '#1A2D6E',
+                            light: '#2A4090',
+                        },
+                        sky: {
+                            brand: '#5BB8E8',
+                            light: '#B8E0F7',
+                            pale:  '#E8F5FD',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        * { scroll-behavior: smooth; box-sizing: border-box; }
+
+        body {
+            background-color: #0A1540;
+            color: #FFFFFF;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #0A1540; }
+        ::-webkit-scrollbar-thumb { background: #5BB8E8; border-radius: 3px; }
+
+        /* Glassmorphism */
+        .glass {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(91,184,232,0.18);
+        }
+
+        /* Gradient text */
+        .grad-text {
+            background: linear-gradient(135deg, #5BB8E8 0%, #B8E0F7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Hero overlay */
+        .hero-overlay {
+            background: linear-gradient(
+                to bottom,
+                rgba(10,21,64,0.72) 0%,
+                rgba(10,21,64,0.35) 45%,
+                rgba(10,21,64,0.88) 100%
+            );
+        }
+
+        /* Navbar blur on scroll */
+        .nav-solid {
+            background: rgba(10,21,64,0.96) !important;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 1px 40px rgba(91,184,232,0.08);
+        }
+
+        /* Primary button */
+        .btn-primary {
+            background: linear-gradient(135deg, #5BB8E8, #1A2D6E);
+            transition: transform 0.25s, box-shadow 0.25s;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-primary::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.18), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.35s ease;
+        }
+        .btn-primary:hover::after { transform: translateX(100%); }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 28px rgba(91,184,232,0.38);
+        }
+
+        /* Product card hover */
+        .prod-card {
+            transition: transform 0.4s ease, border-color 0.4s ease;
+        }
+        .prod-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(91,184,232,0.55) !important;
+        }
+
+        /* pH badge */
+        .ph-badge {
+            width: 62px; height: 62px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #5BB8E8, #1A2D6E);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 800; font-size: 0.68rem; text-align: center; line-height: 1.3;
+            box-shadow: 0 0 22px rgba(91,184,232,0.45);
+            color: #fff;
+        }
+
+        /* Wave SVG dividers */
+        .wave { overflow: hidden; line-height: 0; display: block; }
+
+        /* Scroll bounce */
+        .bounce { animation: bounceY 2s ease-in-out infinite; }
+        @keyframes bounceY {
+            0%,100% { transform: translateY(0); }
+            50%      { transform: translateY(9px); }
+        }
+
+        /* Counter */
+        .count-num {
+            font-size: 3rem; font-weight: 900;
+            background: linear-gradient(135deg, #5BB8E8, #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Section label */
+        .sec-label {
+            display: inline-flex; align-items: center; gap: 10px;
+        }
+        .sec-label::before,
+        .sec-label::after {
+            content: '';
+            display: block; width: 40px; height: 1.5px;
+            background: rgba(91,184,232,0.5);
+        }
+
+        /* Animated water orb background */
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.12;
+            pointer-events: none;
+        }
+
+        /* Form inputs */
+        .form-input {
+            width: 100%;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 14px;
+            padding: 12px 16px;
+            color: #fff;
+            font-size: 0.875rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            outline: none;
+        }
+        .form-input::placeholder { color: rgba(255,255,255,0.28); }
+        .form-input:focus {
+            border-color: #5BB8E8;
+            box-shadow: 0 0 0 2px rgba(91,184,232,0.18);
+        }
+        select.form-input { background-color: #0A1540; }
+        select.form-input option { background: #0A1540; }
+
+        /* Reclamaciones button */
+        .rec-btn {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: rgba(220,38,38,0.15);
+            border: 1px solid rgba(239,68,68,0.3);
+            color: #fca5a5;
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            transition: background 0.2s;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .rec-btn:hover { background: rgba(220,38,38,0.25); }
+
+        /* GSAP initial hidden states for non-hero elements */
+        .anim-up    { opacity: 0; transform: translateY(55px); }
+        .anim-left  { opacity: 0; transform: translateX(-55px); }
+        .anim-right { opacity: 0; transform: translateX(55px); }
+        .anim-scale { opacity: 0; transform: scale(0.94); }
+
+        /* Hero specific (animated on load, not scroll) */
+        .hero-fade { opacity: 0; transform: translateY(45px); }
+        .hero-bottle-wrap { opacity: 0; }
+    </style>
+</head>
+<body>
+
+<!-- ============================================================
+     NAVBAR
+============================================================ -->
+<nav id="navbar" class="fixed top-0 inset-x-0 z-50 transition-all duration-400">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-20">
+
+            <!-- Logo -->
+            <a href="#inicio" class="flex items-center gap-3 flex-shrink-0">
+                <img src="LOGO - AGUA YANA YACU.jpg" alt="Agua Yana Yacu"
+                     class="h-11 w-11 rounded-full object-cover ring-2 ring-sky-brand/30">
+                <div class="hidden sm:block">
+                    <div class="text-white font-black text-base leading-tight">YANA YACU</div>
+                    <div class="text-sky-brand text-[10px] tracking-widest font-medium">CULTURA DE VIDA</div>
+                </div>
+            </a>
+
+            <!-- Desktop links -->
+            <div class="hidden md:flex items-center gap-7">
+                <a href="#inicio"    class="text-white/70 hover:text-sky-brand transition-colors text-sm font-medium">Inicio</a>
+                <a href="#leyenda"   class="text-white/70 hover:text-sky-brand transition-colors text-sm font-medium">La Leyenda</a>
+                <a href="#productos" class="text-white/70 hover:text-sky-brand transition-colors text-sm font-medium">Productos</a>
+                <a href="#socios"    class="text-white/70 hover:text-sky-brand transition-colors text-sm font-medium">Socios B2B</a>
+                <a href="#contacto"  class="btn-primary text-white text-sm font-bold px-5 py-2.5 rounded-full">
+                    Contáctanos
+                </a>
+            </div>
+
+            <!-- Mobile toggle -->
+            <button id="menu-btn" class="md:hidden text-white p-2 rounded-lg hover:bg-white/10 transition-colors">
+                <svg id="icon-open"  class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                <svg id="icon-close" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+        </div>
+
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="md:hidden hidden pb-5 border-t border-white/10 mt-1">
+            <div class="flex flex-col gap-1 pt-3">
+                <a href="#inicio"    class="text-white/70 hover:text-white py-2.5 px-3 rounded-lg hover:bg-white/5 text-sm transition-all">Inicio</a>
+                <a href="#leyenda"   class="text-white/70 hover:text-white py-2.5 px-3 rounded-lg hover:bg-white/5 text-sm transition-all">La Leyenda</a>
+                <a href="#productos" class="text-white/70 hover:text-white py-2.5 px-3 rounded-lg hover:bg-white/5 text-sm transition-all">Productos</a>
+                <a href="#socios"    class="text-white/70 hover:text-white py-2.5 px-3 rounded-lg hover:bg-white/5 text-sm transition-all">Socios B2B</a>
+                <a href="#contacto"  class="btn-primary text-white font-bold px-4 py-3 rounded-xl text-sm text-center mt-2">Contáctanos</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+
+<!-- ============================================================
+     HERO
+============================================================ -->
+<section id="inicio" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+
+    <!-- Video BG -->
+    <video autoplay muted loop playsinline
+           class="absolute inset-0 w-full h-full object-cover z-0"
+           poster="contendio/imagenes/fondoagua.png">
+        <source src="contendio/video/Agua fluyendo.mp4" type="video/mp4">
+    </video>
+
+    <!-- Overlay -->
+    <div class="hero-overlay absolute inset-0 z-10"></div>
+
+    <!-- Orbs deco -->
+    <div class="orb w-96 h-96 bg-sky-brand top-20 -left-20 z-10"></div>
+    <div class="orb w-80 h-80 bg-blue-400 bottom-20 right-0 z-10"></div>
+
+    <!-- Content -->
+    <div class="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-20">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+
+            <!-- Text -->
+            <div>
+                <div class="hero-fade inline-flex items-center gap-2 bg-sky-brand/10 border border-sky-brand/30 rounded-full px-4 py-1.5 mb-7">
+                    <span class="w-2 h-2 rounded-full bg-sky-brand animate-pulse"></span>
+                    <span class="text-sky-brand text-xs font-semibold tracking-widest uppercase">Agua de Mesa Premium</span>
+                </div>
+
+                <h1 class="hero-fade text-5xl sm:text-6xl lg:text-7xl font-black leading-[1.05] mb-6">
+                    El Agua<br>que <span class="grad-text">Enamora</span>
+                </h1>
+
+                <p class="hero-fade text-white/70 text-xl leading-relaxed mb-3 max-w-lg">
+                    Yana Yacu nace de un manantial de leyenda. Una vez que tu cuerpo experimenta su pureza, ya no acepta otra agua.
+                </p>
+
+                <p class="hero-fade text-sky-brand/70 text-xs font-semibold tracking-widest uppercase mb-9">
+                    Cultura de Vida
+                </p>
+
+                <div class="hero-fade flex flex-col sm:flex-row gap-4 mb-5">
+                    <a href="#productos"
+                       class="btn-primary text-white font-bold px-8 py-4 rounded-full text-base text-center">
+                        Ver Productos
+                    </a>
+                    <a href="#leyenda"
+                       class="border border-sky-brand/45 text-sky-brand hover:bg-sky-brand/10 font-semibold px-8 py-4 rounded-full text-base transition-all duration-300 text-center">
+                        Conoce la Leyenda
+                    </a>
+                </div>
+
+                <p class="hero-fade text-white/35 text-xs">
+                    📞 974 667 498 &nbsp;·&nbsp; ✉ info@aguayanayacu.com
+                </p>
+            </div>
+
+            <!-- Bottle -->
+            <div class="hidden lg:flex justify-center items-center relative hero-bottle-wrap">
+                <!-- Glow -->
+                <div class="absolute inset-10 bg-sky-brand/15 rounded-full blur-3xl"></div>
+
+                <img src="contendio/imagenes/Botella Hero.png"
+                     alt="Agua Yana Yacu"
+                     id="hero-bottle"
+                     class="relative z-10 max-h-[68vh] w-auto object-contain drop-shadow-2xl">
+
+                <!-- Floating badge pH -->
+                <div id="b-ph" class="absolute top-8 right-4 glass rounded-2xl px-4 py-3 text-center anim-right">
+                    <div class="text-sky-brand font-black text-2xl">pH 8.5+</div>
+                    <div class="text-white/55 text-xs mt-0.5">Alcalina Premium</div>
+                </div>
+
+                <!-- Floating badge natural -->
+                <div id="b-nat" class="absolute bottom-16 -left-4 glass rounded-2xl px-4 py-3 text-center anim-left">
+                    <div class="text-sky-brand font-black text-xl">100%</div>
+                    <div class="text-white/55 text-xs mt-0.5">Natural · Puro</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 bounce flex flex-col items-center gap-1.5 text-white/35">
+        <span class="text-[10px] tracking-wider uppercase">Descubrir</span>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+        </svg>
+    </div>
+
+    <!-- Wave bottom -->
+    <div class="wave absolute bottom-0 inset-x-0 z-20">
+        <svg viewBox="0 0 1440 70" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+            <path d="M0,35 C360,70 720,0 1080,35 C1260,55 1380,45 1440,35 L1440,70 L0,70 Z" fill="#0A1540"/>
+        </svg>
+    </div>
+</section>
+
+
+<!-- ============================================================
+     STATS BAR
+============================================================ -->
+<section class="bg-navy-deep py-12">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 text-center">
+            <div class="stat-item">
+                <div class="count-num" data-target="3">0</div>
+                <div class="text-white/55 text-sm mt-1">Líneas de producto</div>
+            </div>
+            <div class="stat-item">
+                <div class="count-num" data-target="100"><span class="count-val">0</span><span class="text-sky-brand text-2xl font-black">%</span></div>
+                <div class="text-white/55 text-sm mt-1">Natural y puro</div>
+            </div>
+            <div class="stat-item">
+                <div class="flex items-end justify-center gap-1">
+                    <div class="count-num" data-target="85"><span class="count-val">0</span></div>
+                    <span class="text-sky-brand font-black text-2xl mb-1">+</span>
+                </div>
+                <div class="text-white/55 text-sm mt-1">Distribuidores activos</div>
+            </div>
+            <div class="stat-item">
+                <div class="count-num" data-target="24"><span class="count-val">0</span><span class="text-sky-brand font-black text-2xl">h</span></div>
+                <div class="text-white/55 text-sm mt-1">Atención al cliente</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ============================================================
+     LA LEYENDA DEL POZO
+============================================================ -->
+<section id="leyenda" class="relative py-28 overflow-hidden">
+
+    <!-- Parallax BG -->
+    <div id="leyenda-bg" class="absolute inset-0 z-0">
+        <img src="contendio/imagenes/Imagen Leyenda.jpg"
+             alt="Manantial Yana Yacu"
+             class="w-full h-full object-cover opacity-25">
+        <div class="absolute inset-0"
+             style="background: linear-gradient(to bottom, #0A1540 0%, rgba(10,21,64,0.5) 45%, #0A1540 100%);">
+        </div>
+    </div>
+
+    <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+
+        <div class="sec-label justify-center mb-5 anim-up">
+            <span class="text-sky-brand text-xs font-bold tracking-widest uppercase">La Leyenda</span>
+        </div>
+
+        <h2 class="anim-up text-4xl sm:text-5xl lg:text-6xl font-black leading-tight mb-10">
+            El Pozo de<br><span class="grad-text">Yanayacu</span>
+        </h2>
+
+        <!-- Quote -->
+        <div class="anim-up glass rounded-3xl p-8 sm:p-12 mb-10 relative">
+            <div class="text-sky-brand/15 text-[9rem] font-serif absolute top-0 left-6 leading-none select-none pointer-events-none">"</div>
+            <blockquote class="relative text-xl sm:text-2xl text-white/88 font-light leading-relaxed italic">
+                Cuenta la historia que quien bebe de las aguas del Pozo de Yanayacu, queda prendado de su pureza y ya nunca se marcha.
+            </blockquote>
+            <div class="text-sky-brand/15 text-[9rem] font-serif absolute bottom-0 right-6 leading-none rotate-180 select-none pointer-events-none">"</div>
+        </div>
+
+        <!-- Meaning cards -->
+        <div class="anim-up grid grid-cols-1 sm:grid-cols-2 gap-5 mb-10">
+            <div class="glass rounded-2xl p-7 text-left">
+                <div class="grad-text text-5xl font-black mb-1">Yana</div>
+                <div class="text-white/40 text-xs uppercase tracking-widest mb-2">Quechua</div>
+                <div class="text-white font-bold text-lg mb-2">Amado · Pareja</div>
+                <p class="text-white/55 text-sm leading-relaxed">El vínculo emocional que define a quienes eligen Yana Yacu.</p>
+            </div>
+            <div class="glass rounded-2xl p-7 text-left">
+                <div class="grad-text text-5xl font-black mb-1">Yacu</div>
+                <div class="text-white/40 text-xs uppercase tracking-widest mb-2">Quechua</div>
+                <div class="text-white font-bold text-lg mb-2">Agua · Vida</div>
+                <p class="text-white/55 text-sm leading-relaxed">El elemento que nos conecta con la naturaleza y el bienestar.</p>
+            </div>
+        </div>
+
+        <p class="anim-up text-white/55 text-lg leading-relaxed max-w-2xl mx-auto">
+            Yana Yacu no es solo hidratación — es un vínculo emocional y biológico. Una vez que el cuerpo experimenta el bienestar, ya no acepta otra agua.
+        </p>
+    </div>
+
+    <!-- Wave bottom -->
+    <div class="wave absolute bottom-0 inset-x-0 z-10">
+        <svg viewBox="0 0 1440 55" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+            <path d="M0,28 C480,55 960,0 1440,28 L1440,55 L0,55 Z" fill="#1A2D6E"/>
+        </svg>
+    </div>
+</section>
+
+
+<!-- ============================================================
+     PRODUCTOS
+============================================================ -->
+<section id="productos" class="py-24" style="background-color:#1A2D6E;">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <!-- Header -->
+        <div class="text-center mb-16">
+            <div class="sec-label justify-center mb-4 anim-up">
+                <span class="text-sky-brand text-xs font-bold tracking-widest uppercase">Portafolio</span>
+            </div>
+            <h2 class="anim-up text-4xl sm:text-5xl font-black mb-4">
+                Nuestros <span class="grad-text">Productos</span>
+            </h2>
+            <p class="anim-up text-white/55 text-lg max-w-xl mx-auto">
+                Tres líneas diseñadas para cada necesidad, desde la hidratación diaria hasta el alto rendimiento.
+            </p>
+        </div>
+
+        <!-- Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+
+            <!-- Essential -->
+            <div class="prod-card glass rounded-3xl p-8 text-center border border-white/10 anim-up">
+                <div class="ph-badge mx-auto mb-5">pH<br>6.0</div>
+
+                <div class="relative h-60 flex items-center justify-center mb-6">
+                    <div class="absolute inset-0 bg-sky-brand/5 rounded-full blur-2xl"></div>
+                    <img src="contendio/imagenes/essencial.jpeg"
+                         alt="Agua Essential"
+                         class="relative z-10 h-56 w-auto object-contain transition-transform duration-500 hover:scale-105">
+                </div>
+
+                <div class="text-sky-brand/60 text-[10px] font-bold uppercase tracking-widest mb-1">Línea</div>
+                <h3 class="text-2xl font-black text-white mb-3">Essential</h3>
+                <p class="text-white/55 text-sm leading-relaxed mb-5">
+                    Equilibrio y ligereza para el consumo diario familiar. Pureza certificada.
+                </p>
+
+                <ul class="text-left space-y-2 mb-6">
+                    <li class="flex items-center gap-2 text-white/65 text-sm">
+                        <span class="w-1.5 h-1.5 rounded-full bg-sky-brand flex-shrink-0"></span>
+                        Hidratación diaria familiar
+                    </li>
+                    <li class="flex items-center gap-2 text-white/65 text-sm">
+                        <span class="w-1.5 h-1.5 rounded-full bg-sky-brand flex-shrink-0"></span>
+                        Sabor equilibrado y suave
+                    </li>
+                    <li class="flex items-center gap-2 text-white/65 text-sm">
+                        <span class="w-1.5 h-1.5 rounded-full bg-sky-brand flex-shrink-0"></span>
+                        Registro Sanitario DIGESA
+                    </li>
+                </ul>
+
+                <button onclick="scrollToContact()"
+                        class="btn-primary w-full py-3 rounded-2xl text-white font-bold text-sm">
+                    Pedir ahora
+                </button>
+            </div>
+
+            <!-- Premium FEATURED -->
+            <div class="prod-card glass rounded-3xl p-8 text-center relative anim-up md:-mt-4 md:mb-4"
+                 style="border: 1.5px solid rgba(91,184,232,0.5); transform: scale(1.04);">
+
+                <div class="absolute -top-4 left-1/2 -translate-x-1/2 whitespace-nowrap bg-sky-brand text-navy-deep text-xs font-black px-5 py-1.5 rounded-full shadow-lg">
+                    ★ MÁS POPULAR
+                </div>
+
+                <div class="ph-badge mx-auto mb-5" style="background: linear-gradient(135deg, #B8E0F7, #5BB8E8); color: #0A1540;">
+                    pH<br>8.5+
+                </div>
+
+                <div class="relative h-60 flex items-center justify-center mb-6">
+                    <div class="absolute inset-0 bg-sky-brand/12 rounded-full blur-2xl"></div>
+                    <img src="contendio/imagenes/Botella Premium.jpeg"
+                         alt="Agua Premium Alcalina"
+                         class="relative z-10 h-56 w-auto object-contain transition-transform duration-500 hover:scale-105">
+                </div>
+
+                <div class="text-sky-brand text-[10px] font-bold uppercase tracking-widest mb-1">Línea</div>
+                <h3 class="text-2xl font-black text-white mb-3">Premium <span class="grad-text">Alcalina</span></h3>
+                <p class="text-white/55 text-sm leading-relaxed mb-5">
+                    Optimización del organismo, neutralización de acidez y vitalidad celular activa.
+                </p>
+
+                <ul class="text-left space-y-2 mb-6">
+                    <li class="flex items-center gap-2 text-white/65 text-sm">
+                        <span class="w-1.5 h-1.5 rounded-full bg-sky-brand flex-shrink-0"></span>
+                        Neutraliza la acidez corporal
+                    </li>
+                    <li class="flex items-center gap-2 text-white/65 text-sm">
+                        <span class="w-1.5 h-1.5 rounded-full bg-sky-brand flex-shrink-0"></span>
+                        Vitalidad celular aumentada
+                    </li>
+                    <li class="flex items-center gap-2 text-white/65 text-sm">
+                        <span class="w-1.5 h-1.5 rounded-full bg-sky-brand flex-shrink-0"></span>
+                        pH 8.5+ comprobado
+                    </li>
+                </ul>
+
+                <button onclick="scrollToContact()"
+                        class="w-full py-3 rounded-2xl font-bold text-sm transition-all duration-300 hover:shadow-xl hover:scale-[1.02]"
+                        style="background: linear-gradient(135deg, #B8E0F7, #5BB8E8); color: #0A1540;">
+                    Pedir ahora
+                </button>
+            </div>
+
+            <!-- Performance -->
+            <div class="prod-card glass rounded-3xl p-8 text-center border border-white/10 anim-up">
+                <div class="ph-badge mx-auto mb-5"
+                     style="background: linear-gradient(135deg, #1A2D6E, #0A1540); border: 2px solid #5BB8E8;">
+                    <span style="font-size:1.4rem;">⚡</span>
+                </div>
+
+                <div class="relative h-60 flex items-center justify-center mb-6">
+                    <div class="absolute inset-0 bg-sky-brand/5 rounded-full blur-2xl"></div>
+                    <img src="contendio/imagenes/bidon.jpg"
+                         alt="Hidratante Performance"
+                         class="relative z-10 h-56 w-auto object-contain transition-transform duration-500 hover:scale-105">
+                </div>
+
+                <div class="text-sky-brand/60 text-[10px] font-bold uppercase tracking-widest mb-1">Línea</div>
+                <h3 class="text-2xl font-black text-white mb-3">Performance</h3>
+                <p class="text-white/55 text-sm leading-relaxed mb-5">
+                    Reposición inteligente de electrolitos para el alto rendimiento deportivo.
+                </p>
+
+                <ul class="text-left space-y-2 mb-6">
+                    <li class="flex items-center gap-2 text-white/65 text-sm">
+                        <span class="w-1.5 h-1.5 rounded-full bg-sky-brand flex-shrink-0"></span>
+                        Electrolitos balanceados
+                    </li>
+                    <li class="flex items-center gap-2 text-white/65 text-sm">
+                        <span class="w-1.5 h-1.5 rounded-full bg-sky-brand flex-shrink-0"></span>
+                        Recuperación rápida
+                    </li>
+                    <li class="flex items-center gap-2 text-white/65 text-sm">
+                        <span class="w-1.5 h-1.5 rounded-full bg-sky-brand flex-shrink-0"></span>
+                        Para alto rendimiento
+                    </li>
+                </ul>
+
+                <button onclick="scrollToContact()"
+                        class="btn-primary w-full py-3 rounded-2xl text-white font-bold text-sm">
+                    Pedir ahora
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wave bottom -->
+    <div class="wave mt-16">
+        <svg viewBox="0 0 1440 55" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+            <path d="M0,0 C360,55 720,0 1080,35 C1260,55 1380,25 1440,0 L1440,55 L0,55 Z" fill="#0A1540"/>
+        </svg>
+    </div>
+</section>
+
+
+<!-- ============================================================
+     VIDEO INMERSIVO - Nacimiento del Agua
+============================================================ -->
+<section class="bg-navy-deep py-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <div class="text-center mb-12 anim-up">
+            <div class="sec-label justify-center mb-4">
+                <span class="text-sky-brand text-xs font-bold tracking-widest uppercase">Origen</span>
+            </div>
+            <h2 class="text-4xl font-black mb-4">
+                Naturaleza en <span class="grad-text">cada gota</span>
+            </h2>
+            <p class="text-white/55 text-lg max-w-xl mx-auto">
+                Desde el manantial hasta tu mesa, Yana Yacu preserva la pureza que la naturaleza nos regala.
+            </p>
+        </div>
+
+        <!-- Video box -->
+        <div id="vid-box" class="anim-scale relative rounded-3xl overflow-hidden shadow-2xl"
+             style="aspect-ratio: 16/9;">
+            <video autoplay muted loop playsinline class="w-full h-full object-cover">
+                <source src="contendio/video/nacimiento de agua.mp4" type="video/mp4">
+            </video>
+            <div class="absolute inset-0"
+                 style="background: linear-gradient(to top, rgba(10,21,64,0.75) 0%, transparent 50%);">
+            </div>
+            <div class="absolute bottom-6 left-6 right-6 flex flex-col sm:flex-row items-start sm:items-end justify-between gap-3">
+                <div>
+                    <p class="text-sky-brand text-xs font-bold uppercase tracking-wider mb-1">Origen Natural</p>
+                    <p class="text-white font-bold text-xl">Manantial de Yanayacu</p>
+                </div>
+                <div class="glass rounded-xl px-4 py-2 text-sm text-white/75">
+                    💧 100% natural · Sin conservantes
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ============================================================
+     BENEFICIOS
+============================================================ -->
+<section id="beneficios" class="bg-navy-deep py-24 relative overflow-hidden">
+
+    <!-- Water background deco -->
+    <div class="absolute inset-0 opacity-[0.04] pointer-events-none">
+        <img src="contendio/imagenes/fondoagua.png" alt="" class="w-full h-full object-cover">
+    </div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+
+            <!-- Video -->
+            <div id="ben-img" class="anim-left relative">
+                <div class="absolute -inset-5 bg-sky-brand/8 rounded-3xl blur-3xl"></div>
+                <div class="relative z-10 w-full rounded-3xl overflow-hidden shadow-2xl" style="max-height: 520px;">
+                    <video autoplay muted loop playsinline class="w-full h-full object-cover" style="max-height: 520px;">
+                        <source src="contendio/video/Toma del producto.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <!-- Floating tag -->
+                <div class="absolute -bottom-4 -right-4 z-20 glass rounded-2xl px-5 py-3 text-center">
+                    <div class="text-3xl mb-1">💚</div>
+                    <div class="text-white font-bold text-sm">Bienestar diario</div>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div id="ben-txt" class="anim-right">
+                <div class="sec-label mb-4">
+                    <span class="text-sky-brand text-xs font-bold tracking-widest uppercase">Por qué elegirnos</span>
+                </div>
+                <h2 class="text-4xl sm:text-5xl font-black leading-tight mb-8">
+                    Agua que<br><span class="grad-text">transforma</span><br>tu bienestar
+                </h2>
+
+                <div class="space-y-6">
+                    <div class="flex items-start gap-4 ben-item">
+                        <div class="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0"
+                             style="background:rgba(91,184,232,0.1); border:1px solid rgba(91,184,232,0.2);">
+                            <span class="text-xl">💧</span>
+                        </div>
+                        <div>
+                            <h3 class="text-white font-bold text-lg mb-1">Pureza certificada DIGESA</h3>
+                            <p class="text-white/55 text-sm leading-relaxed">Registro Sanitario vigente. Tu salud es nuestra responsabilidad.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4 ben-item">
+                        <div class="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0"
+                             style="background:rgba(91,184,232,0.1); border:1px solid rgba(91,184,232,0.2);">
+                            <span class="text-xl">⚗️</span>
+                        </div>
+                        <div>
+                            <h3 class="text-white font-bold text-lg mb-1">pH perfectamente calibrado</h3>
+                            <p class="text-white/55 text-sm leading-relaxed">Tres líneas con pH optimizado: 6.0, 8.5+ y electrolitos para cada necesidad.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4 ben-item">
+                        <div class="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0"
+                             style="background:rgba(91,184,232,0.1); border:1px solid rgba(91,184,232,0.2);">
+                            <span class="text-xl">🚚</span>
+                        </div>
+                        <div>
+                            <h3 class="text-white font-bold text-lg mb-1">Despacho programado</h3>
+                            <p class="text-white/55 text-sm leading-relaxed">Delivery puntual a hogares y negocios. Siempre hidratado, sin interrupciones.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4 ben-item">
+                        <div class="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0"
+                             style="background:rgba(91,184,232,0.1); border:1px solid rgba(91,184,232,0.2);">
+                            <span class="text-xl">🌿</span>
+                        </div>
+                        <div>
+                            <h3 class="text-white font-bold text-lg mb-1">100% Natural · Sin aditivos</h3>
+                            <p class="text-white/55 text-sm leading-relaxed">Solo lo que la naturaleza y la ciencia pueden ofrecer. Sin conservantes.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ============================================================
+     B2B / SOCIOS COMERCIALES
+============================================================ -->
+<section id="socios" class="relative py-24 overflow-hidden"
+         style="background: linear-gradient(135deg, #1A2D6E 0%, #0A1540 100%);">
+
+    <!-- Wave top -->
+    <div class="wave absolute top-0 inset-x-0 rotate-180">
+        <svg viewBox="0 0 1440 55" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+            <path d="M0,28 C480,55 960,0 1440,28 L1440,55 L0,55 Z" fill="#0A1540"/>
+        </svg>
+    </div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+
+            <!-- Content -->
+            <div id="soc-txt" class="anim-left">
+                <div class="sec-label mb-4">
+                    <span class="text-sky-brand text-xs font-bold tracking-widest uppercase">B2B · Distribuidores</span>
+                </div>
+                <h2 class="text-4xl sm:text-5xl font-black leading-tight mb-6">
+                    Potencia tu<br><span class="grad-text">Negocio</span><br>con Yana Yacu
+                </h2>
+                <p class="text-white/65 text-lg leading-relaxed mb-8">
+                    ¿Quieres ser cliente? ¿Deseas vender nuestras bebidas en tu negocio? Únete a nuestra red de aliados y ofrece un producto con respaldo corporativo y alta demanda.
+                </p>
+
+                <!-- Benefits grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-9">
+                    <div class="soc-item flex items-center gap-3">
+                        <div class="w-7 h-7 rounded-lg bg-sky-brand/20 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-3.5 h-3.5 text-sky-brand" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <span class="text-white/75 text-sm">Precios corporativos por volumen</span>
+                    </div>
+                    <div class="soc-item flex items-center gap-3">
+                        <div class="w-7 h-7 rounded-lg bg-sky-brand/20 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-3.5 h-3.5 text-sky-brand" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <span class="text-white/75 text-sm">Packs de lanzamiento</span>
+                    </div>
+                    <div class="soc-item flex items-center gap-3">
+                        <div class="w-7 h-7 rounded-lg bg-sky-brand/20 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-3.5 h-3.5 text-sky-brand" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <span class="text-white/75 text-sm">Apoyo logístico completo</span>
+                    </div>
+                    <div class="soc-item flex items-center gap-3">
+                        <div class="w-7 h-7 rounded-lg bg-sky-brand/20 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-3.5 h-3.5 text-sky-brand" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <span class="text-white/75 text-sm">Despacho programado</span>
+                    </div>
+                    <div class="soc-item flex items-center gap-3">
+                        <div class="w-7 h-7 rounded-lg bg-sky-brand/20 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-3.5 h-3.5 text-sky-brand" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <span class="text-white/75 text-sm">Material de impulso PDV</span>
+                    </div>
+                    <div class="soc-item flex items-center gap-3">
+                        <div class="w-7 h-7 rounded-lg bg-sky-brand/20 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-3.5 h-3.5 text-sky-brand" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <span class="text-white/75 text-sm">Alta demanda de mercado</span>
+                    </div>
+                </div>
+
+                <a href="#contacto"
+                   class="btn-primary inline-flex items-center gap-2 text-white font-bold px-8 py-4 rounded-full">
+                    Contactar Ejecutivo de Ventas
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                    </svg>
+                </a>
+            </div>
+
+            <!-- Image -->
+            <div id="soc-img" class="anim-right">
+                <div class="relative">
+                    <div class="absolute -inset-6 bg-sky-brand/8 rounded-3xl blur-3xl"></div>
+                    <img src="contendio/imagenes/cartonagua.png"
+                         alt="Cartón Agua Yana Yacu"
+                         class="relative z-10 w-full rounded-3xl object-contain"
+                         style="max-height: 480px;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wave bottom -->
+    <div class="wave absolute bottom-0 inset-x-0">
+        <svg viewBox="0 0 1440 55" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+            <path d="M0,28 C360,0 720,55 1080,18 C1260,0 1380,30 1440,28 L1440,55 L0,55 Z" fill="#0A1540"/>
+        </svg>
+    </div>
+</section>
+
+
+<!-- ============================================================
+     CONTACTO
+============================================================ -->
+<section id="contacto" class="bg-navy-deep py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+
+            <!-- Left: info + product video -->
+            <div id="con-left" class="anim-left">
+                <div class="sec-label mb-4">
+                    <span class="text-sky-brand text-xs font-bold tracking-widest uppercase">Contáctanos</span>
+                </div>
+                <h2 class="text-4xl sm:text-5xl font-black mb-5">
+                    Solicita tu<br><span class="grad-text">Pedido</span>
+                </h2>
+                <p class="text-white/55 text-lg leading-relaxed mb-10">
+                    Contacta a un ejecutivo de ventas y solicita promociones. Estamos listos para atenderte.
+                </p>
+
+                <!-- Contact details -->
+                <div class="space-y-5 mb-10">
+                    <div class="flex items-center gap-4">
+                        <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
+                             style="background:rgba(91,184,232,0.1); border:1px solid rgba(91,184,232,0.2);">
+                            <span class="text-lg">📞</span>
+                        </div>
+                        <div>
+                            <div class="text-white/35 text-[10px] uppercase tracking-widest">Teléfono</div>
+                            <a href="tel:+51974667498" class="text-white font-semibold text-lg hover:text-sky-brand transition-colors">
+                                974 667 498
+                            </a>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
+                             style="background:rgba(91,184,232,0.1); border:1px solid rgba(91,184,232,0.2);">
+                            <span class="text-lg">✉️</span>
+                        </div>
+                        <div>
+                            <div class="text-white/35 text-[10px] uppercase tracking-widest">Correo</div>
+                            <a href="mailto:info@aguayanayacu.com" class="text-white font-semibold text-lg hover:text-sky-brand transition-colors">
+                                info@aguayanayacu.com
+                            </a>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
+                             style="background:rgba(91,184,232,0.1); border:1px solid rgba(91,184,232,0.2);">
+                            <span class="text-lg">📍</span>
+                        </div>
+                        <div>
+                            <div class="text-white/35 text-[10px] uppercase tracking-widest">Dirección de Planta</div>
+                            <div class="text-white font-semibold">Calle Pedro Ortega MZ i Lote C11 - Urb. Chacupe</div>
+                            <div class="text-white/55 text-xs mt-0.5">Distrito La Victoria · Chiclayo · Lambayeque</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
+                             style="background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.2);">
+                            <span class="text-lg">💬</span>
+                        </div>
+                        <div>
+                            <div class="text-white/35 text-[10px] uppercase tracking-widest">WhatsApp</div>
+                            <a href="https://wa.me/51974667498" target="_blank"
+                               class="text-green-400 font-semibold hover:text-green-300 transition-colors">
+                                Escribir por WhatsApp →
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product video -->
+                <div class="relative rounded-2xl overflow-hidden" style="aspect-ratio: 16/9; max-height: 200px;">
+                    <video autoplay muted loop playsinline class="w-full h-full object-cover">
+                        <source src="contendio/video/botellamano.mp4" type="video/mp4">
+                    </video>
+                    <div class="absolute inset-0" style="background:rgba(10,21,64,0.28);"></div>
+                    <div class="absolute bottom-3 left-3 glass rounded-lg px-3 py-1 text-white text-xs font-semibold">
+                        Nuestros Productos
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: form -->
+            <div id="con-right" class="anim-right">
+                <div class="glass rounded-3xl p-8 sm:p-10">
+                    <h3 class="text-xl font-black text-white mb-1">Formulario de Contacto</h3>
+                    <p class="text-white/40 text-sm mb-8">Un ejecutivo te contactará en menos de 24 horas.</p>
+
+                    <form id="contact-form" class="space-y-5" onsubmit="handleSubmit(event)">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-white/50 text-[10px] uppercase tracking-widest mb-2">Nombre *</label>
+                                <input type="text" required placeholder="Tu nombre completo" class="form-input">
+                            </div>
+                            <div>
+                                <label class="block text-white/50 text-[10px] uppercase tracking-widest mb-2">Teléfono *</label>
+                                <input type="tel" required placeholder="999 999 999" class="form-input">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-white/50 text-[10px] uppercase tracking-widest mb-2">Correo Electrónico *</label>
+                            <input type="email" required placeholder="tu@correo.com" class="form-input">
+                        </div>
+
+                        <div>
+                            <label class="block text-white/50 text-[10px] uppercase tracking-widest mb-2">Tipo de Consulta</label>
+                            <select class="form-input">
+                                <option value="">Seleccionar...</option>
+                                <option>Quiero ser cliente</option>
+                                <option>Quiero ser distribuidor</option>
+                                <option>Hacer un pedido</option>
+                                <option>Solicitar información</option>
+                                <option>Cliente corporativo</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-white/50 text-[10px] uppercase tracking-widest mb-2">Mensaje</label>
+                            <textarea rows="4" placeholder="Cuéntanos qué necesitas..." class="form-input resize-none"></textarea>
+                        </div>
+
+                        <!-- Privacy checkbox -->
+                        <div class="flex items-start gap-3">
+                            <input type="checkbox" required id="priv-check"
+                                   class="mt-0.5 w-4 h-4 rounded accent-sky-brand flex-shrink-0 cursor-pointer">
+                            <label for="priv-check" class="text-white/40 text-xs leading-relaxed cursor-pointer">
+                                Acepto la <a href="#" class="text-sky-brand hover:underline">Política de Privacidad</a> y el tratamiento de mis datos personales según la
+                                <strong class="text-white/60">Ley 29733</strong> (Ley de Protección de Datos Personales – Perú).
+                            </label>
+                        </div>
+
+                        <button type="submit"
+                                class="btn-primary w-full py-4 rounded-2xl text-white font-black text-base tracking-wide">
+                            Enviar Solicitud
+                        </button>
+                    </form>
+
+                    <!-- Success state -->
+                    <div id="form-success" class="hidden text-center py-10">
+                        <div class="text-5xl mb-4">💧</div>
+                        <h3 class="text-xl font-black text-white mb-2">¡Mensaje enviado!</h3>
+                        <p class="text-white/55">Un ejecutivo se pondrá en contacto contigo pronto.</p>
+                        <button onclick="resetForm()"
+                                class="mt-6 text-sky-brand text-sm hover:underline">
+                            Enviar otro mensaje
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ============================================================
+     FOOTER
+============================================================ -->
+<footer class="bg-navy-deep border-t border-white/8">
+
+    <!-- Main footer -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+
+            <!-- Brand -->
+            <div class="lg:col-span-1">
+                <div class="flex items-center gap-3 mb-5">
+                    <img src="LOGO - AGUA YANA YACU.jpg" alt="Yana Yacu"
+                         class="h-14 w-14 rounded-full object-cover ring-2 ring-sky-brand/25">
+                    <div>
+                        <div class="text-white font-black text-lg">YANA YACU</div>
+                        <div class="text-sky-brand text-[10px] tracking-widest">CULTURA DE VIDA</div>
+                    </div>
+                </div>
+                <p class="text-white/40 text-sm leading-relaxed mb-4">
+                    Agua de Mesa Premium. El agua que enamora, desde el manantial de Yanayacu.
+                </p>
+                <div class="text-white/25 text-xs space-y-1">
+                    <div>AGUA YANA YACU S.A.C.S.</div>
+                    <div>RUC: 20615455262</div>
+                </div>
+            </div>
+
+            <!-- Products -->
+            <div>
+                <h4 class="text-white font-bold text-sm uppercase tracking-wider mb-5">Productos</h4>
+                <ul class="space-y-3">
+                    <li><a href="#productos" class="text-white/45 hover:text-sky-brand text-sm transition-colors">Agua Essential (pH 6.0)</a></li>
+                    <li><a href="#productos" class="text-white/45 hover:text-sky-brand text-sm transition-colors">Agua Premium Alcalina (pH 8.5+)</a></li>
+                    <li><a href="#productos" class="text-white/45 hover:text-sky-brand text-sm transition-colors">Performance Hidratantes</a></li>
+                    <li><a href="#socios"    class="text-white/45 hover:text-sky-brand text-sm transition-colors">Distribuidores B2B</a></li>
+                </ul>
+            </div>
+
+            <!-- Legal -->
+            <div>
+                <h4 class="text-white font-bold text-sm uppercase tracking-wider mb-5">Legal</h4>
+                <ul class="space-y-3">
+                    <li><a href="#" class="text-white/45 hover:text-sky-brand text-sm transition-colors">Política de Privacidad</a></li>
+                    <li><a href="#" class="text-white/45 hover:text-sky-brand text-sm transition-colors">Términos y Condiciones</a></li>
+                    <li><a href="#" class="text-white/45 hover:text-sky-brand text-sm transition-colors">Registro Sanitario DIGESA</a></li>
+                    <li>
+                        <!-- OBLIGATORIO LEY PERUANA -->
+                        <a href="#" id="open-reclamaciones" class="rec-btn">
+                            📋 Libro de Reclamaciones
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Contact -->
+            <div>
+                <h4 class="text-white font-bold text-sm uppercase tracking-wider mb-5">Contacto</h4>
+                <ul class="space-y-3">
+                    <li class="flex items-center gap-2 text-sm">
+                        <span>📞</span>
+                        <a href="tel:+51974667498" class="text-white/45 hover:text-sky-brand transition-colors">974 667 498</a>
+                    </li>
+                    <li class="flex items-center gap-2 text-sm">
+                        <span>✉️</span>
+                        <a href="mailto:info@aguayanayacu.com" class="text-white/45 hover:text-sky-brand transition-colors">info@aguayanayacu.com</a>
+                    </li>
+                    <li class="flex items-start gap-2 text-sm">
+                        <span class="mt-0.5">📍</span>
+                        <span class="text-white/45">Calle Pedro Ortega MZ i Lote C11 - Urb. Chacupe, Dist. La Victoria, Chiclayo, Lambayeque</span>
+                    </li>
+                </ul>
+
+                <a href="https://wa.me/51974667498" target="_blank"
+                   class="inline-flex items-center gap-2 mt-5 px-4 py-2 rounded-lg text-green-400 text-sm transition-all duration-200"
+                   style="background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.25);">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                    </svg>
+                    WhatsApp
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom bar -->
+    <div class="border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
+                <p class="text-white/25 text-xs text-center sm:text-left">
+                    © 2026 AGUA YANA YACU S.A.C.S. · RUC 20615455262 · Todos los derechos reservados.
+                </p>
+                <p class="text-white/20 text-xs">
+                    Registro Sanitario vigente · Autorizado por DIGESA · Cumple Ley 29733
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+<!-- ============================================================
+     MODAL LIBRO DE RECLAMACIONES
+============================================================ -->
+<div id="modal-rec" class="fixed inset-0 z-[200] hidden items-center justify-center p-4">
+    <div class="absolute inset-0 bg-navy-deep/95 backdrop-blur-sm" onclick="closeRec()"></div>
+    <div class="relative z-10 w-full max-w-lg glass rounded-3xl p-8 sm:p-10">
+        <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center gap-3">
+                <span class="text-2xl">📋</span>
+                <div>
+                    <h3 class="text-white font-black text-xl">Libro de Reclamaciones</h3>
+                    <p class="text-white/40 text-xs">Según Ley 29571 — Código de Protección al Consumidor</p>
+                </div>
+            </div>
+            <button onclick="closeRec()" class="text-white/35 hover:text-white text-2xl leading-none">✕</button>
+        </div>
+
+        <p class="text-white/50 text-sm mb-7 leading-relaxed">
+            Tienes derecho a presentar tu reclamo o queja. Nos comprometemos a responderte en 15 días hábiles.
+        </p>
+
+        <form class="space-y-4" onsubmit="handleRec(event)">
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-white/45 text-[10px] uppercase tracking-widest mb-2">Nombre Completo *</label>
+                    <input type="text" required placeholder="Tu nombre" class="form-input">
+                </div>
+                <div>
+                    <label class="block text-white/45 text-[10px] uppercase tracking-widest mb-2">DNI / CE *</label>
+                    <input type="text" required placeholder="12345678" class="form-input">
+                </div>
+            </div>
+            <div>
+                <label class="block text-white/45 text-[10px] uppercase tracking-widest mb-2">Correo Electrónico *</label>
+                <input type="email" required placeholder="tu@correo.com" class="form-input">
+            </div>
+            <div>
+                <label class="block text-white/45 text-[10px] uppercase tracking-widest mb-2">Teléfono</label>
+                <input type="tel" placeholder="999 999 999" class="form-input">
+            </div>
+            <div>
+                <label class="block text-white/45 text-[10px] uppercase tracking-widest mb-2">Tipo *</label>
+                <select required class="form-input">
+                    <option value="">Seleccionar...</option>
+                    <option value="queja">Queja (insatisfacción sin afectación económica)</option>
+                    <option value="reclamo">Reclamo (afectación económica o de interés)</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-white/45 text-[10px] uppercase tracking-widest mb-2">Descripción Detallada *</label>
+                <textarea rows="4" required placeholder="Describe tu queja o reclamo..." class="form-input resize-none"></textarea>
+            </div>
+            <button type="submit"
+                    class="w-full py-3 rounded-2xl text-white font-bold text-sm transition-all duration-200"
+                    style="background: linear-gradient(135deg, #dc2626, #991b1b);">
+                Presentar Reclamación
+            </button>
+        </form>
+    </div>
+</div>
+
+
+<!-- ============================================================
+     WHATSAPP FLOTANTE
+============================================================ -->
+<a href="https://wa.me/51974667498" target="_blank"
+   class="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full flex items-center justify-center shadow-xl transition-all duration-300 hover:scale-110"
+   style="background:#25D366; box-shadow: 0 4px 20px rgba(37,211,102,0.45);"
+   title="WhatsApp Yana Yacu">
+    <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+    </svg>
+</a>
+
+
+<!-- ============================================================
+     SCRIPTS
+============================================================ -->
+<script>
+    // ── Register ScrollTrigger ──────────────────────────────────
+    gsap.registerPlugin(ScrollTrigger);
+
+    // ── NAVBAR scroll effect ───────────────────────────────────
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+        navbar.classList.toggle('nav-solid', window.scrollY > 60);
+    }, { passive: true });
+
+    // ── Mobile menu ────────────────────────────────────────────
+    const menuBtn   = document.getElementById('menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const iconOpen  = document.getElementById('icon-open');
+    const iconClose = document.getElementById('icon-close');
+
+    menuBtn.addEventListener('click', () => {
+        const open = mobileMenu.classList.toggle('hidden');
+        iconOpen.classList.toggle('hidden', !open);
+        iconClose.classList.toggle('hidden', open);
+    });
+    mobileMenu.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', () => {
+            mobileMenu.classList.add('hidden');
+            iconOpen.classList.remove('hidden');
+            iconClose.classList.add('hidden');
+        });
+    });
+
+    // ── HERO — on load ─────────────────────────────────────────
+    gsap.set('.hero-bottle-wrap', { opacity: 0 });
+    const heroTl = gsap.timeline({ delay: 0.25 });
+    heroTl
+        .to('.hero-fade', {
+            opacity: 1, y: 0,
+            duration: 0.8, stagger: 0.14,
+            ease: 'power3.out'
+        })
+        .to('.hero-bottle-wrap', {
+            opacity: 1,
+            duration: 0.9, ease: 'power3.out'
+        }, '-=0.55')
+        .to('#b-ph', {
+            opacity: 1, x: 0,
+            duration: 0.6, ease: 'back.out(1.7)'
+        }, '-=0.35')
+        .to('#b-nat', {
+            opacity: 1, x: 0,
+            duration: 0.6, ease: 'back.out(1.7)'
+        }, '-=0.4');
+
+    // Hero bottle parallax
+    gsap.to('#hero-bottle', {
+        y: -70, ease: 'none',
+        scrollTrigger: {
+            trigger: '#inicio',
+            start: 'top top',
+            end:   'bottom top',
+            scrub: 1.2
+        }
+    });
+
+    // ── STATS counters ─────────────────────────────────────────
+    document.querySelectorAll('.stat-item').forEach(item => {
+        const numEl  = item.querySelector('.count-num');
+        const target = parseInt(numEl.dataset.target, 10);
+        const valEl  = numEl.querySelector('.count-val') || numEl;
+
+        const obj = { value: 0 };
+        gsap.to(obj, {
+            value: target, duration: 2.2, ease: 'power2.out',
+            onUpdate() { valEl.textContent = Math.round(obj.value); },
+            scrollTrigger: {
+                trigger: item, start: 'top 88%', once: true
+            }
+        });
+    });
+
+    // ── LEYENDA parallax + reveals ─────────────────────────────
+    gsap.to('#leyenda-bg img', {
+        y: -55, ease: 'none',
+        scrollTrigger: {
+            trigger: '#leyenda',
+            start: 'top bottom', end: 'bottom top',
+            scrub: 1
+        }
+    });
+
+    gsap.utils.toArray('#leyenda .anim-up').forEach((el, i) => {
+        gsap.fromTo(el,
+            { opacity: 0, y: 55 },
+            { opacity: 1, y: 0, duration: 0.85, ease: 'power3.out',
+              scrollTrigger: { trigger: el, start: 'top 86%', once: true } }
+        );
+    });
+
+    // ── PRODUCTS cards stagger ─────────────────────────────────
+    gsap.utils.toArray('#productos .anim-up').forEach((el, i) => {
+        gsap.fromTo(el,
+            { opacity: 0, y: 65 },
+            { opacity: 1, y: 0, duration: 0.8, delay: i * 0.04,
+              ease: 'power3.out',
+              scrollTrigger: { trigger: el, start: 'top 88%', once: true } }
+        );
+    });
+
+    // ── VIDEO BOX scale in ─────────────────────────────────────
+    gsap.fromTo('#vid-box',
+        { opacity: 0, scale: 0.93 },
+        { opacity: 1, scale: 1, duration: 1.1, ease: 'power3.out',
+          scrollTrigger: { trigger: '#vid-box', start: 'top 80%', once: true } }
+    );
+
+    // ── BENEFITS left/right slide ──────────────────────────────
+    gsap.fromTo('#ben-img',
+        { opacity: 0, x: -65 },
+        { opacity: 1, x: 0, duration: 1, ease: 'power3.out',
+          scrollTrigger: { trigger: '#beneficios', start: 'top 72%', once: true } }
+    );
+    gsap.fromTo('#ben-txt',
+        { opacity: 0, x: 65 },
+        { opacity: 1, x: 0, duration: 1, ease: 'power3.out',
+          scrollTrigger: { trigger: '#beneficios', start: 'top 72%', once: true } }
+    );
+    gsap.utils.toArray('.ben-item').forEach((el, i) => {
+        gsap.fromTo(el,
+            { opacity: 0, x: 30 },
+            { opacity: 1, x: 0, duration: 0.6, delay: i * 0.12,
+              ease: 'power3.out',
+              scrollTrigger: { trigger: el, start: 'top 88%', once: true } }
+        );
+    });
+
+    // ── B2B left/right slide ───────────────────────────────────
+    gsap.fromTo('#soc-txt',
+        { opacity: 0, x: -65 },
+        { opacity: 1, x: 0, duration: 1, ease: 'power3.out',
+          scrollTrigger: { trigger: '#socios', start: 'top 72%', once: true } }
+    );
+    gsap.fromTo('#soc-img',
+        { opacity: 0, x: 65 },
+        { opacity: 1, x: 0, duration: 1, ease: 'power3.out',
+          scrollTrigger: { trigger: '#socios', start: 'top 72%', once: true } }
+    );
+    gsap.utils.toArray('.soc-item').forEach((el, i) => {
+        gsap.fromTo(el,
+            { opacity: 0, y: 18 },
+            { opacity: 1, y: 0, duration: 0.45, delay: i * 0.08,
+              ease: 'power2.out',
+              scrollTrigger: { trigger: el, start: 'top 90%', once: true } }
+        );
+    });
+
+    // ── CONTACT slide ──────────────────────────────────────────
+    gsap.fromTo('#con-left',
+        { opacity: 0, x: -55 },
+        { opacity: 1, x: 0, duration: 0.95, ease: 'power3.out',
+          scrollTrigger: { trigger: '#contacto', start: 'top 72%', once: true } }
+    );
+    gsap.fromTo('#con-right',
+        { opacity: 0, y: 55 },
+        { opacity: 1, y: 0, duration: 0.95, ease: 'power3.out',
+          scrollTrigger: { trigger: '#contacto', start: 'top 72%', once: true } }
+    );
+
+    // ── FORM handler ───────────────────────────────────────────
+    function handleSubmit(e) {
+        e.preventDefault();
+        document.getElementById('contact-form').classList.add('hidden');
+        document.getElementById('form-success').classList.remove('hidden');
+    }
+    function resetForm() {
+        document.getElementById('contact-form').reset();
+        document.getElementById('contact-form').classList.remove('hidden');
+        document.getElementById('form-success').classList.add('hidden');
+    }
+    function scrollToContact() {
+        document.getElementById('contacto').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // ── LIBRO DE RECLAMACIONES ─────────────────────────────────
+    document.getElementById('open-reclamaciones').addEventListener('click', e => {
+        e.preventDefault();
+        const m = document.getElementById('modal-rec');
+        m.classList.remove('hidden');
+        m.classList.add('flex');
+    });
+    function closeRec() {
+        const m = document.getElementById('modal-rec');
+        m.classList.add('hidden');
+        m.classList.remove('flex');
+    }
+    function handleRec(e) {
+        e.preventDefault();
+        closeRec();
+        alert('Tu reclamación ha sido registrada correctamente.\nNos comunicaremos contigo en un plazo máximo de 15 días hábiles, conforme a la Ley 29571.');
+    }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeRec(); });
+
+    // ── VIDEO observer (pause if not visible) ──────────────────
+    if ('IntersectionObserver' in window) {
+        const vids = document.querySelectorAll('video[autoplay]');
+        const io = new IntersectionObserver(entries => {
+            entries.forEach(en => {
+                if (en.isIntersecting) en.target.play().catch(()=>{});
+                else en.target.pause();
+            });
+        }, { threshold: 0.25 });
+        vids.forEach(v => io.observe(v));
+    }
+</script>
+</body>
+</html>

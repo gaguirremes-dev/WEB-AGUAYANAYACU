@@ -1,0 +1,5 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/corpo46/aguayanayacu.com/
+    - /bin/cp -R %{SOURCEROOT}/. $DEPLOYPATH

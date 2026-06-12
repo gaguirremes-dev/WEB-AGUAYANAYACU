@@ -1,6 +1,4 @@
 <?php
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
 /**
  * Libro de Reclamaciones Virtual - Agua Yana Yacu
  * Conforme a la Ley N° 29571 (Código de Protección y Defensa del Consumidor)
@@ -689,17 +687,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <!-- SUCCESS SCREEN -->
         <?php if ($success): ?>
 
-            <!-- DEBUG TEMPORAL -->
-            <?php if (!empty($debugLog)): ?>
-            <div style="background:#111;color:#0f0;font-family:monospace;font-size:13px;padding:16px;border-radius:8px;margin-bottom:20px;border:1px solid #0f0;">
-                <strong style="color:#ff0;">🛠 DEBUG (temporal):</strong><br><br>
-                <?php foreach ($debugLog as $line): ?>
-                    <?= htmlspecialchars($line) ?><br>
-                <?php endforeach; ?>
-            </div>
-            <?php endif; ?>
-
-            <div class="print-card glass rounded-3xl p-8 sm:p-12 shadow-2xl relative border border-emerald-500/30">
+<div class="print-card glass rounded-3xl p-8 sm:p-12 shadow-2xl relative border border-emerald-500/30">
                 <!-- Water Orb Deco (no-print) -->
                 <div class="no-print absolute -right-20 -top-20 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
 

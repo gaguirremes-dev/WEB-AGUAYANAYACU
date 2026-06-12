@@ -1,0 +1,2 @@
+# Denegar el acceso público a todos los archivos de esta carpeta
+Deny from all

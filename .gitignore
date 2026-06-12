@@ -1,0 +1,14 @@
+# Credenciales SMTP reales (usar config.smtp.example.php como plantilla)
+config.smtp.php
+
+# Datos personales de los reclamos (Ley N° 29733 - Protección de Datos)
+reclamaciones/records.json
+reclamaciones/records.lock
+reclamaciones/*.pdf
+
+# Librería FPDF auto-descargada en el servidor
+lib/
+
+# Archivos del sistema
+Thumbs.db
+.DS_Store

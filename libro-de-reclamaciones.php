@@ -1,4 +1,6 @@
 <?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 /**
  * Libro de Reclamaciones Virtual - Agua Yana Yacu
  * Conforme a la Ley N° 29571 (Código de Protección y Defensa del Consumidor)
@@ -270,6 +272,7 @@ $success = false;
 $errorMsg = '';
 $generatedCode = '';
 $submittedData = [];
+$debugLog = [];
 
 // Capturar errores fatales para evitar pantalla en blanco
 set_error_handler(function($errno, $errstr) use (&$errorMsg) {
@@ -374,9 +377,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($fpdfAvailable) {
                 try {
                     $pdfBytes = generarPDFReclamo($submittedData);
+                    $debugLog[] = '✅ PDF generado correctamente.';
                 } catch (Exception $e) {
-                    // PDF no disponible (ej: fuentes faltantes), continuar sin adjunto
+                    $debugLog[] = '⚠️ PDF falló: ' . $e->getMessage();
                 }
+            } else {
+                $debugLog[] = '⚠️ FPDF no disponible (lib/fpdf.php no encontrado).';
             }
             $pdfB64     = $pdfBytes ? chunk_split(base64_encode($pdfBytes)) : '';
             $pdfName    = 'Hoja_Reclamacion_' . $generatedCode . '.pdf';
@@ -450,7 +456,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ";
             
             // Enviar al cliente (con PDF adjunto) vía SMTP
-            enviarCorreoSMTP($email, $subjectCliente, $emailBody, $pdfB64, $pdfName);
+            $errCliente = '';
+            $okCliente = enviarCorreoSMTP($email, $subjectCliente, $emailBody, $pdfB64, $pdfName, $errCliente);
+            $debugLog[] = $okCliente ? "✅ Correo al cliente ($email) enviado." : "❌ Correo al cliente falló: $errCliente";
 
             // 2. Preparar y enviar correo a la empresa
             $subjectEmpresa = "NUEVA HOJA DE RECLAMACIÓN N° $generatedCode - $nombres";
@@ -498,7 +506,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ";
             
             // Enviar a la empresa (con PDF adjunto) vía SMTP
-            enviarCorreoSMTP(EMPRESA_NOTIF_EMAIL, $subjectEmpresa, $emailBodyEmpresa, $pdfB64, $pdfName);
+            $errEmpresa = '';
+            $okEmpresa = enviarCorreoSMTP(EMPRESA_NOTIF_EMAIL, $subjectEmpresa, $emailBodyEmpresa, $pdfB64, $pdfName, $errEmpresa);
+            $debugLog[] = $okEmpresa ? '✅ Correo a la empresa (' . EMPRESA_NOTIF_EMAIL . ') enviado.' : '❌ Correo a la empresa falló: ' . $errEmpresa;
         }
     }
 }
@@ -678,6 +688,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <!-- SUCCESS SCREEN -->
         <?php if ($success): ?>
+
+            <!-- DEBUG TEMPORAL -->
+            <?php if (!empty($debugLog)): ?>
+            <div style="background:#111;color:#0f0;font-family:monospace;font-size:13px;padding:16px;border-radius:8px;margin-bottom:20px;border:1px solid #0f0;">
+                <strong style="color:#ff0;">🛠 DEBUG (temporal):</strong><br><br>
+                <?php foreach ($debugLog as $line): ?>
+                    <?= htmlspecialchars($line) ?><br>
+                <?php endforeach; ?>
+            </div>
+            <?php endif; ?>
+
             <div class="print-card glass rounded-3xl p-8 sm:p-12 shadow-2xl relative border border-emerald-500/30">
                 <!-- Water Orb Deco (no-print) -->
                 <div class="no-print absolute -right-20 -top-20 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>

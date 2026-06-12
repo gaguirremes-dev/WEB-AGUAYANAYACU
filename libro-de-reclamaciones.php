@@ -31,18 +31,14 @@ $recordsDir = __DIR__ . '/reclamaciones';
 $recordsFile = $recordsDir . '/records.json';
 $lockFile = $recordsDir . '/records.lock';
 
-// Crear el directorio si no existe
+// Crear el directorio si no existe (debe tener permisos de escritura en el servidor)
 if (!is_dir($recordsDir)) {
-    mkdir($recordsDir, 0755, true);
+    if (!@mkdir($recordsDir, 0755, true)) {
+        $errorMsg = 'Error de configuración del servidor: no se puede crear el directorio de registros. Contacte al administrador.';
+    }
 }
 
-// ── AUTO-INSTALAR FPDF (solo la primera vez) ──────────────────────────────────
 $fpdfPath = __DIR__ . '/lib/fpdf.php';
-if (!file_exists($fpdfPath)) {
-    if (!is_dir(__DIR__ . '/lib')) @mkdir(__DIR__ . '/lib', 0755, true);
-    $fpdfSrc = @file_get_contents('https://raw.githubusercontent.com/Setasign/FPDF/master/fpdf.php');
-    if ($fpdfSrc) @file_put_contents($fpdfPath, $fpdfSrc);
-}
 $fpdfAvailable = file_exists($fpdfPath);
 if ($fpdfAvailable) require_once $fpdfPath;
 
@@ -275,6 +271,14 @@ $errorMsg = '';
 $generatedCode = '';
 $submittedData = [];
 
+// Capturar errores fatales para evitar pantalla en blanco
+set_error_handler(function($errno, $errstr) use (&$errorMsg) {
+    if ($errno === E_ERROR || $errno === E_USER_ERROR) {
+        $errorMsg = 'Error interno del servidor. Por favor, inténtelo más tarde.';
+    }
+    return true;
+});
+
 // Procesar el formulario si es una solicitud POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Sanitización básica
@@ -302,8 +306,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $pedido = filter_input(INPUT_POST, 'pedido', FILTER_SANITIZE_SPECIAL_CHARS);
     
     // Validar campos obligatorios
-    if (!$nombres || !$doc_tipo || !$doc_nro || !$email || !$direccion || !$bien_tipo || !$reclamo_tipo || !$detalle || !$pedido) {
-        $errorMsg = 'Por favor, rellene todos los campos obligatorios del formulario.';
+    if (!$nombres || !$doc_tipo || !$doc_nro || !$email || !$direccion || !$bien_tipo || !$reclamo_tipo || !$detalle || !$pedido || !empty($errorMsg)) {
+        if (empty($errorMsg)) $errorMsg = 'Por favor, rellene todos los campos obligatorios del formulario.';
     } else {
         // Bloquear archivo y guardar registro
         $fp = fopen($lockFile, 'w');

@@ -1,4 +1,6 @@
 <?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 /**
  * Libro de Reclamaciones Virtual - Agua Yana Yacu
  * Conforme a la Ley N° 29571 (Código de Protección y Defensa del Consumidor)

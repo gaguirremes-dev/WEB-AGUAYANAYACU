@@ -1,6 +1,4 @@
 <?php
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
 /**
  * Libro de Reclamaciones Virtual - Agua Yana Yacu
  * Conforme a la Ley N° 29571 (Código de Protección y Defensa del Consumidor)
@@ -372,7 +370,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($success) {
 
             // ── Generar PDF adjunto ───────────────────────────────────────────
-            $pdfBytes   = $fpdfAvailable ? generarPDFReclamo($submittedData) : '';
+            $pdfBytes = '';
+            if ($fpdfAvailable) {
+                try {
+                    $pdfBytes = generarPDFReclamo($submittedData);
+                } catch (Exception $e) {
+                    // PDF no disponible (ej: fuentes faltantes), continuar sin adjunto
+                }
+            }
             $pdfB64     = $pdfBytes ? chunk_split(base64_encode($pdfBytes)) : '';
             $pdfName    = 'Hoja_Reclamacion_' . $generatedCode . '.pdf';
 

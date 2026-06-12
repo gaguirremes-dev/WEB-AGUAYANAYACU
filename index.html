@@ -206,6 +206,14 @@
             border: 1px solid rgba(91,184,232,0.18);
         }
 
+        /* Tarjeta del formulario de contacto: marco visible también en móvil,
+           sin depender de backdrop-filter (que se rompe por el transform de GSAP) */
+        .form-card {
+            background: rgba(26,45,110,0.55);
+            border: 1px solid rgba(91,184,232,0.4);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+        }
+
         /* Gradient text */
         .grad-text {
             background: linear-gradient(135deg, #5BB8E8 0%, #B8E0F7 100%);
@@ -1095,7 +1103,7 @@
 
             <!-- Right: form -->
             <div id="con-right" class="anim-right">
-                <div class="glass rounded-3xl p-8 sm:p-10">
+                <div class="form-card rounded-3xl p-6 sm:p-10">
                     <h3 class="text-xl font-black text-white mb-1">Formulario de Contacto</h3>
                     <p class="text-white/40 text-sm mb-8">Un ejecutivo te contactará en menos de 24 horas.</p>
 

@@ -360,12 +360,37 @@
         .anim-right { opacity: 0; transform: translateX(55px); }
         .anim-scale { opacity: 0; transform: scale(0.94); }
 
+        /* Marquee belt */
+        .marquee-wrapper {
+            -webkit-mask: linear-gradient(90deg, transparent 0%, #fff 8%, #fff 92%, transparent 100%);
+            mask: linear-gradient(90deg, transparent 0%, #fff 8%, #fff 92%, transparent 100%);
+        }
+        .marquee-track { display: flex; width: max-content; will-change: transform; }
+        /* margin-right en lugar de gap para que el espacio exista DESPUÉS del último card y el loop sea seamless */
+        .marquee-card { width: 268px; flex-shrink: 0; cursor: pointer; margin-right: 1.5rem; }
+        .marquee-card:hover .card-img { transform: scale(1.07); }
+
+        /* Product modal */
+        #product-modal { background: rgba(0,0,0,0.72); backdrop-filter: blur(8px); }
+        #modal-box { max-height: 90vh; overflow-y: auto; scrollbar-width: thin; scrollbar-color: #5BB8E8 transparent; }
+
+        /* Scroll progress bar */
+        #progress-bar {
+            position: fixed; top: 0; left: 0; width: 100%; height: 3px; z-index: 200;
+            background: linear-gradient(90deg, #5BB8E8 0%, #B8E0F7 50%, #5BB8E8 100%);
+            transform-origin: left center; transform: scaleX(0);
+            pointer-events: none;
+        }
+
         /* Hero specific (animated on load, not scroll) */
         .hero-fade { opacity: 0; transform: translateY(45px); }
         .hero-bottle-wrap { opacity: 0; }
     </style>
 </head>
 <body>
+
+<!-- Scroll progress -->
+<div id="progress-bar"></div>
 
 <!-- ============================================================
      NAVBAR
@@ -427,12 +452,11 @@
 <!-- ============================================================
      HERO
 ============================================================ -->
-<section id="inicio" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+<section id="inicio" class="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
 
     <!-- Video BG -->
     <video autoplay muted loop playsinline
-           class="absolute inset-0 w-full h-full object-cover z-0"
-           poster="contendio/imagenes/fondoagua.png">
+           class="absolute inset-0 w-full h-full object-cover z-0">
         <source src="contendio/video/Agua fluyendo.mp4" type="video/mp4">
     </video>
 
@@ -440,72 +464,8 @@
     <div class="hero-overlay absolute inset-0 z-10"></div>
 
     <!-- Orbs deco -->
-    <div class="orb w-96 h-96 bg-sky-brand top-20 -left-20 z-10"></div>
-    <div class="orb w-80 h-80 bg-blue-400 bottom-20 right-0 z-10"></div>
-
-    <!-- Content -->
-    <div class="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-20">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-
-            <!-- Text -->
-            <div>
-                <div class="hero-fade inline-flex items-center gap-2 bg-sky-brand/10 border border-sky-brand/30 rounded-full px-4 py-1.5 mb-7">
-                    <span class="w-2 h-2 rounded-full bg-sky-brand animate-pulse"></span>
-                    <span class="text-sky-brand text-xs font-semibold tracking-widest uppercase">Agua de Mesa Premium</span>
-                </div>
-
-                <h1 class="hero-fade text-5xl sm:text-6xl lg:text-7xl font-black leading-[1.05] mb-6">
-                    El Agua<br>que <span class="grad-text">Enamora</span>
-                </h1>
-
-                <p class="hero-fade text-white/70 text-xl leading-relaxed mb-3 max-w-lg">
-                    Yana Yacu es un agua de pureza legendaria. Una vez que tu cuerpo la experimenta, ya no acepta otra agua.
-                </p>
-
-                <p class="hero-fade text-sky-brand/70 text-xs font-semibold tracking-widest uppercase mb-9">
-                    Cultura de Vida
-                </p>
-
-                <div class="hero-fade flex flex-col sm:flex-row gap-4 mb-5">
-                    <a href="#productos"
-                       class="btn-primary text-white font-bold px-8 py-4 rounded-full text-base text-center">
-                        Ver Productos
-                    </a>
-                    <a href="#leyenda"
-                       class="border border-sky-brand/45 text-sky-brand hover:bg-sky-brand/10 font-semibold px-8 py-4 rounded-full text-base transition-all duration-300 text-center">
-                        Conoce la Leyenda
-                    </a>
-                </div>
-
-                <p class="hero-fade text-white/35 text-xs">
-                    📞 974 667 498 &nbsp;·&nbsp; ✉ info@aguayanayacu.com
-                </p>
-            </div>
-
-            <!-- Bottle -->
-            <div class="hidden lg:flex justify-center items-center relative hero-bottle-wrap">
-                <!-- Glow -->
-                <div class="absolute inset-10 bg-sky-brand/15 rounded-full blur-3xl"></div>
-
-                <img src="contendio/imagenes/Botella Hero.png"
-                     alt="Agua Yana Yacu"
-                     id="hero-bottle"
-                     class="relative z-10 max-h-[68vh] w-auto object-contain drop-shadow-2xl">
-
-                <!-- Floating badge pH -->
-                <div id="b-ph" class="absolute top-8 right-4 glass rounded-2xl px-4 py-3 text-center anim-right">
-                    <div class="text-sky-brand font-black text-2xl">pH 8.5+</div>
-                    <div class="text-white/55 text-xs mt-0.5">Alcalina Premium</div>
-                </div>
-
-                <!-- Floating badge natural -->
-                <div id="b-nat" class="absolute bottom-16 -left-4 glass rounded-2xl px-4 py-3 text-center anim-left">
-                    <div class="text-sky-brand font-black text-xl">100%</div>
-                    <div class="text-white/55 text-xs mt-0.5">Natural · Puro</div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div id="orb-1" class="orb w-96 h-96 bg-sky-brand top-20 -left-20 z-10"></div>
+    <div id="orb-2" class="orb w-80 h-80 bg-blue-400 bottom-20 right-0 z-10"></div>
 
     <!-- Scroll indicator -->
     <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 bounce flex flex-col items-center gap-1.5 text-white/35">
@@ -576,12 +536,12 @@
             <span class="text-sky-brand text-xs font-bold tracking-widest uppercase">La Leyenda</span>
         </div>
 
-        <h2 class="anim-up text-4xl sm:text-5xl lg:text-6xl font-black leading-tight mb-10">
+        <h2 id="leyenda-title" class="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight mb-10">
             La Leyenda de<br><span class="grad-text">Yanayacu</span>
         </h2>
 
         <!-- Quote -->
-        <div class="anim-up glass rounded-3xl p-8 sm:p-12 mb-10 relative">
+        <div id="leyenda-quote" class="glass rounded-3xl p-8 sm:p-12 mb-10 relative">
             <div class="text-sky-brand/15 text-[9rem] font-serif absolute top-0 left-6 leading-none select-none pointer-events-none">"</div>
             <blockquote class="relative text-xl sm:text-2xl text-white/88 font-light leading-relaxed italic">
                 Cuenta la historia que quien prueba Yana Yacu queda prendado de su pureza y ya nunca se marcha.
@@ -590,14 +550,14 @@
         </div>
 
         <!-- Meaning cards -->
-        <div class="anim-up grid grid-cols-1 sm:grid-cols-2 gap-5 mb-10">
-            <div class="glass rounded-2xl p-7 text-left">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-10">
+            <div id="yana-card" class="glass rounded-2xl p-7 text-left">
                 <div class="grad-text text-5xl font-black mb-1">Yana</div>
                 <div class="text-white/40 text-xs uppercase tracking-widest mb-2">Quechua</div>
                 <div class="text-white font-bold text-lg mb-2">Amado · Pareja</div>
                 <p class="text-white/55 text-sm leading-relaxed">El vínculo emocional que define a quienes eligen Yana Yacu.</p>
             </div>
-            <div class="glass rounded-2xl p-7 text-left">
+            <div id="yacu-card" class="glass rounded-2xl p-7 text-left">
                 <div class="grad-text text-5xl font-black mb-1">Yacu</div>
                 <div class="text-white/40 text-xs uppercase tracking-widest mb-2">Quechua</div>
                 <div class="text-white font-bold text-lg mb-2">Agua · Vida</div>
@@ -634,140 +594,88 @@
                 Nuestros <span class="grad-text">Productos</span>
             </h2>
             <p class="anim-up text-white/55 text-lg max-w-xl mx-auto">
-                Tres líneas diseñadas para cada necesidad, desde la hidratación diaria hasta el alto rendimiento.
+                Cuatro líneas diseñadas para cada necesidad, desde la hidratación diaria hasta la recuperación activa.
             </p>
         </div>
 
-        <!-- Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+        <!-- Marquee belt -->
+        <div class="marquee-wrapper overflow-hidden py-4">
+            <div class="marquee-track">
 
-            <!-- Essential -->
-            <div class="prod-card glass rounded-3xl p-8 text-center border border-white/10 anim-up">
-                <div class="ph-badge mx-auto mb-5">pH<br>6.0</div>
-
-                <div class="relative h-60 flex items-center justify-center mb-6">
-                    <div class="absolute inset-0 bg-sky-brand/5 rounded-full blur-2xl"></div>
-                    <img src="contendio/imagenes/essencial.jpeg"
-                         alt="Agua Yana Yacu Essential pH 6.0"
-                         loading="lazy"
-                         class="relative z-10 h-56 w-auto object-contain transition-transform duration-500 hover:scale-105">
+                <!-- Essential -->
+                <div class="marquee-card prod-card rounded-3xl overflow-hidden border border-white/10"
+                     onclick="openProductModal('essential')">
+                    <div class="relative flex items-end justify-center overflow-hidden"
+                         style="height:320px; background:linear-gradient(180deg,rgba(15,30,80,0.7) 0%,rgba(10,21,64,0.95) 100%);">
+                        <div class="absolute inset-0" style="background:radial-gradient(ellipse at 50% 30%, rgba(91,184,232,0.18), transparent 70%);"></div>
+                        <img src="contendio/imagenes/essencial.jpeg" alt="Essential" loading="lazy"
+                             class="card-img relative z-10 w-full h-full object-contain transition-transform duration-500 drop-shadow-2xl p-4">
+                        <div class="absolute top-3 left-3 ph-badge z-20" style="width:44px;height:44px;font-size:0.56rem;">pH<br>6.0</div>
+                    </div>
+                    <div class="p-4 text-center" style="background:rgba(10,21,64,0.9);">
+                        <div class="text-sky-brand/55 text-[9px] font-bold uppercase tracking-widest mb-0.5">Línea</div>
+                        <h3 class="text-base font-black text-white">Essential</h3>
+                        <p class="text-sky-brand/40 text-[10px] mt-1">Toca para ver más →</p>
+                    </div>
                 </div>
 
-                <div class="text-sky-brand/60 text-[10px] font-bold uppercase tracking-widest mb-1">Línea</div>
-                <h3 class="text-2xl font-black text-white mb-3">Essential</h3>
-                <p class="text-white/55 text-sm leading-relaxed mb-5">
-                    Equilibrio y ligereza para el consumo diario familiar. Pureza certificada.
-                </p>
-
-                <ul class="text-left space-y-2 mb-6">
-                    <li class="flex items-center gap-2 text-white/65 text-sm">
-                        <span class="w-1.5 h-1.5 rounded-full bg-sky-brand flex-shrink-0"></span>
-                        Hidratación diaria familiar
-                    </li>
-                    <li class="flex items-center gap-2 text-white/65 text-sm">
-                        <span class="w-1.5 h-1.5 rounded-full bg-sky-brand flex-shrink-0"></span>
-                        Sabor equilibrado y suave
-                    </li>
-                    <li class="flex items-center gap-2 text-white/65 text-sm">
-                        <span class="w-1.5 h-1.5 rounded-full bg-sky-brand flex-shrink-0"></span>
-                        Registro Sanitario DIGESA
-                    </li>
-                </ul>
-
-                <button onclick="scrollToContact()"
-                        class="btn-primary w-full py-3 rounded-2xl text-white font-bold text-sm">
-                    Pedir ahora
-                </button>
-            </div>
-
-            <!-- Premium FEATURED -->
-            <div class="prod-card glass rounded-3xl p-8 text-center relative anim-up md:-mt-4 md:mb-4"
-                 style="border: 1.5px solid rgba(91,184,232,0.5); transform: scale(1.04);">
-
-                <div class="absolute -top-4 left-1/2 -translate-x-1/2 whitespace-nowrap bg-sky-brand text-navy-deep text-xs font-black px-5 py-1.5 rounded-full shadow-lg">
-                    ★ MÁS POPULAR
+                <!-- Premium -->
+                <div class="marquee-card prod-card rounded-3xl overflow-hidden relative"
+                     style="border:1.5px solid rgba(91,184,232,0.45);"
+                     onclick="openProductModal('premium')">
+                    <div class="absolute top-0 left-1/2 -translate-x-1/2 z-20 whitespace-nowrap bg-sky-brand text-navy-deep text-[9px] font-black px-4 py-0.5 rounded-b-xl">★ MÁS POPULAR</div>
+                    <div class="relative flex items-end justify-center overflow-hidden"
+                         style="height:320px; background:linear-gradient(180deg,rgba(15,30,80,0.7) 0%,rgba(10,21,64,0.95) 100%);">
+                        <div class="absolute inset-0" style="background:radial-gradient(ellipse at 50% 30%, rgba(91,184,232,0.25), transparent 70%);"></div>
+                        <img src="contendio/imagenes/Botella Premium.jpeg" alt="Premium Alcalina" loading="lazy"
+                             class="card-img relative z-10 w-full h-full object-contain transition-transform duration-500 drop-shadow-2xl p-4">
+                        <div class="absolute top-3 left-3 ph-badge z-20" style="width:44px;height:44px;font-size:0.56rem;background:linear-gradient(135deg,#B8E0F7,#5BB8E8);color:#0A1540;">pH<br>8.5+</div>
+                    </div>
+                    <div class="p-4 text-center" style="background:rgba(10,21,64,0.9);">
+                        <div class="text-sky-brand text-[9px] font-bold uppercase tracking-widest mb-0.5">Línea</div>
+                        <h3 class="text-base font-black text-white">Premium <span class="grad-text">Alcalina</span></h3>
+                        <p class="text-sky-brand/40 text-[10px] mt-1">Toca para ver más →</p>
+                    </div>
                 </div>
 
-                <div class="ph-badge mx-auto mb-5" style="background: linear-gradient(135deg, #B8E0F7, #5BB8E8); color: #0A1540;">
-                    pH<br>8.5+
+                <!-- Performance -->
+                <div class="marquee-card prod-card rounded-3xl overflow-hidden border border-white/10"
+                     onclick="openProductModal('performance')">
+                    <div class="relative flex items-end justify-center overflow-hidden"
+                         style="height:320px; background:linear-gradient(180deg,rgba(15,30,80,0.7) 0%,rgba(10,21,64,0.95) 100%);">
+                        <div class="absolute inset-0" style="background:radial-gradient(ellipse at 50% 30%, rgba(91,184,232,0.12), transparent 70%);"></div>
+                        <img src="contendio/imagenes/bidon.jpg" alt="Performance" loading="lazy"
+                             class="card-img relative z-10 w-full h-full object-contain transition-transform duration-500 drop-shadow-2xl p-4">
+                        <div class="absolute top-3 left-3 ph-badge z-20" style="width:44px;height:44px;background:linear-gradient(135deg,#1A2D6E,#0A1540);border:2px solid #5BB8E8;">
+                            <span style="font-size:1rem;">⚡</span>
+                        </div>
+                    </div>
+                    <div class="p-4 text-center" style="background:rgba(10,21,64,0.9);">
+                        <div class="text-sky-brand/55 text-[9px] font-bold uppercase tracking-widest mb-0.5">Línea</div>
+                        <h3 class="text-base font-black text-white">Performance</h3>
+                        <p class="text-sky-brand/40 text-[10px] mt-1">Toca para ver más →</p>
+                    </div>
                 </div>
 
-                <div class="relative h-60 flex items-center justify-center mb-6">
-                    <div class="absolute inset-0 bg-sky-brand/12 rounded-full blur-2xl"></div>
-                    <img src="contendio/imagenes/Botella Premium.jpeg"
-                         alt="Agua Yana Yacu Premium Alcalina pH 8.5"
-                         loading="lazy"
-                         class="relative z-10 h-56 w-auto object-contain transition-transform duration-500 hover:scale-105">
+                <!-- R-Kuperat -->
+                <div class="marquee-card prod-card rounded-3xl overflow-hidden border border-white/10"
+                     onclick="openProductModal('rkuperat')">
+                    <div class="relative flex items-end justify-center overflow-hidden"
+                         style="height:320px; background:linear-gradient(180deg,rgba(10,40,18,0.7) 0%,rgba(10,21,64,0.95) 100%);">
+                        <div class="absolute inset-0" style="background:radial-gradient(ellipse at 50% 30%, rgba(74,222,128,0.12), transparent 70%);"></div>
+                        <img src="contendio/imagenes/r-kuperat.jpg" alt="R-Kuperat" loading="lazy"
+                             class="card-img relative z-10 w-full h-full object-contain transition-transform duration-500 drop-shadow-2xl p-4">
+                        <div class="absolute top-3 left-3 ph-badge z-20" style="width:44px;height:44px;background:linear-gradient(135deg,#0f4c1a,#1a7a2e);border:2px solid #4ade80;">
+                            <span style="font-size:1rem;">💧</span>
+                        </div>
+                    </div>
+                    <div class="p-4 text-center" style="background:rgba(10,21,64,0.9);">
+                        <div class="text-sky-brand/55 text-[9px] font-bold uppercase tracking-widest mb-0.5">Línea</div>
+                        <h3 class="text-base font-black text-white">R-Kuperat</h3>
+                        <p class="text-sky-brand/40 text-[10px] mt-1">Toca para ver más →</p>
+                    </div>
                 </div>
 
-                <div class="text-sky-brand text-[10px] font-bold uppercase tracking-widest mb-1">Línea</div>
-                <h3 class="text-2xl font-black text-white mb-3">Premium <span class="grad-text">Alcalina</span></h3>
-                <p class="text-white/55 text-sm leading-relaxed mb-5">
-                    Optimización del organismo, neutralización de acidez y vitalidad celular activa.
-                </p>
-
-                <ul class="text-left space-y-2 mb-6">
-                    <li class="flex items-center gap-2 text-white/65 text-sm">
-                        <span class="w-1.5 h-1.5 rounded-full bg-sky-brand flex-shrink-0"></span>
-                        Neutraliza la acidez corporal
-                    </li>
-                    <li class="flex items-center gap-2 text-white/65 text-sm">
-                        <span class="w-1.5 h-1.5 rounded-full bg-sky-brand flex-shrink-0"></span>
-                        Vitalidad celular aumentada
-                    </li>
-                    <li class="flex items-center gap-2 text-white/65 text-sm">
-                        <span class="w-1.5 h-1.5 rounded-full bg-sky-brand flex-shrink-0"></span>
-                        pH 8.5+ comprobado
-                    </li>
-                </ul>
-
-                <button onclick="scrollToContact()"
-                        class="w-full py-3 rounded-2xl font-bold text-sm transition-all duration-300 hover:shadow-xl hover:scale-[1.02]"
-                        style="background: linear-gradient(135deg, #B8E0F7, #5BB8E8); color: #0A1540;">
-                    Pedir ahora
-                </button>
-            </div>
-
-            <!-- Performance -->
-            <div class="prod-card glass rounded-3xl p-8 text-center border border-white/10 anim-up">
-                <div class="ph-badge mx-auto mb-5"
-                     style="background: linear-gradient(135deg, #1A2D6E, #0A1540); border: 2px solid #5BB8E8;">
-                    <span style="font-size:1.4rem;">⚡</span>
-                </div>
-
-                <div class="relative h-60 flex items-center justify-center mb-6">
-                    <div class="absolute inset-0 bg-sky-brand/5 rounded-full blur-2xl"></div>
-                    <img src="contendio/imagenes/bidon.jpg"
-                         alt="Agua Yana Yacu Performance con Electrolitos"
-                         loading="lazy"
-                         class="relative z-10 h-56 w-auto object-contain transition-transform duration-500 hover:scale-105">
-                </div>
-
-                <div class="text-sky-brand/60 text-[10px] font-bold uppercase tracking-widest mb-1">Línea</div>
-                <h3 class="text-2xl font-black text-white mb-3">Performance</h3>
-                <p class="text-white/55 text-sm leading-relaxed mb-5">
-                    Reposición inteligente de electrolitos para el alto rendimiento deportivo.
-                </p>
-
-                <ul class="text-left space-y-2 mb-6">
-                    <li class="flex items-center gap-2 text-white/65 text-sm">
-                        <span class="w-1.5 h-1.5 rounded-full bg-sky-brand flex-shrink-0"></span>
-                        Electrolitos balanceados
-                    </li>
-                    <li class="flex items-center gap-2 text-white/65 text-sm">
-                        <span class="w-1.5 h-1.5 rounded-full bg-sky-brand flex-shrink-0"></span>
-                        Recuperación rápida
-                    </li>
-                    <li class="flex items-center gap-2 text-white/65 text-sm">
-                        <span class="w-1.5 h-1.5 rounded-full bg-sky-brand flex-shrink-0"></span>
-                        Para alto rendimiento
-                    </li>
-                </ul>
-
-                <button onclick="scrollToContact()"
-                        class="btn-primary w-full py-3 rounded-2xl text-white font-bold text-sm">
-                    Pedir ahora
-                </button>
             </div>
         </div>
     </div>
@@ -787,7 +695,7 @@
 <section class="bg-navy-deep py-20">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        <div class="text-center mb-12 anim-up">
+        <div id="pureza-header" class="text-center mb-12 anim-up">
             <div class="sec-label justify-center mb-4">
                 <span class="text-sky-brand text-xs font-bold tracking-widest uppercase">Pureza</span>
             </div>
@@ -799,23 +707,23 @@
             </p>
         </div>
 
-        <!-- Video box -->
-        <div id="vid-box" class="anim-scale relative rounded-3xl overflow-hidden shadow-2xl"
-             style="aspect-ratio: 16/9;">
-            <video autoplay muted loop playsinline class="w-full h-full object-cover">
-                <source src="contendio/video/nacimiento de agua.mp4" type="video/mp4">
-            </video>
-            <div class="absolute inset-0"
-                 style="background: linear-gradient(to top, rgba(10,21,64,0.75) 0%, transparent 50%);">
+        <!-- Duo editorial -->
+        <div id="vid-box" class="grid grid-cols-2 gap-5 items-end">
+
+            <!-- POST 1 -->
+            <div id="post-1" class="relative rounded-3xl overflow-hidden shadow-2xl" style="aspect-ratio: 4/5;">
+                <img src="contendio/imagenes/POST_1.jpg"
+                     alt="Pureza Yana Yacu"
+                     loading="lazy"
+                     class="w-full h-full object-cover transition-transform duration-700 hover:scale-105">
             </div>
-            <div class="absolute bottom-6 left-6 right-6 flex flex-col sm:flex-row items-start sm:items-end justify-between gap-3">
-                <div>
-                    <p class="text-sky-brand text-xs font-bold uppercase tracking-wider mb-1">Calidad Premium</p>
-                    <p class="text-white font-bold text-xl">Pureza Yana Yacu</p>
-                </div>
-                <div class="glass rounded-xl px-4 py-2 text-sm text-white/75">
-                    💧 Pureza garantizada · Sin conservantes
-                </div>
+
+            <!-- POST 3 — desplazado hacia abajo para asimetría -->
+            <div id="post-2" class="relative rounded-3xl overflow-hidden shadow-2xl mt-16" style="aspect-ratio: 4/5;">
+                <img src="contendio/imagenes/POST_3.jpg"
+                     alt="Yana Yacu"
+                     loading="lazy"
+                     class="w-full h-full object-cover transition-transform duration-700 hover:scale-105">
             </div>
         </div>
     </div>
@@ -836,7 +744,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
             <!-- Video -->
-            <div id="ben-img" class="anim-left relative">
+            <div id="ben-img" class="relative">
                 <div class="absolute -inset-5 bg-sky-brand/8 rounded-3xl blur-3xl"></div>
                 <div class="relative z-10 w-full rounded-3xl overflow-hidden shadow-2xl" style="max-height: 520px;">
                     <video autoplay muted loop playsinline class="w-full h-full object-cover" style="max-height: 520px;">
@@ -844,14 +752,14 @@
                     </video>
                 </div>
                 <!-- Floating tag -->
-                <div class="absolute -bottom-4 -right-4 z-20 glass rounded-2xl px-5 py-3 text-center">
+                <div id="ben-tag" class="absolute -bottom-4 -right-4 z-20 glass rounded-2xl px-5 py-3 text-center">
                     <div class="text-3xl mb-1">💚</div>
                     <div class="text-white font-bold text-sm">Bienestar diario</div>
                 </div>
             </div>
 
             <!-- Content -->
-            <div id="ben-txt" class="anim-right">
+            <div id="ben-txt">
                 <div class="sec-label mb-4">
                     <span class="text-sky-brand text-xs font-bold tracking-widest uppercase">Por qué elegirnos</span>
                 </div>
@@ -924,7 +832,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
             <!-- Content -->
-            <div id="soc-txt" class="anim-left">
+            <div id="soc-txt">
                 <div class="sec-label mb-4">
                     <span class="text-sky-brand text-xs font-bold tracking-widest uppercase">B2B · Distribuidores</span>
                 </div>
@@ -997,10 +905,10 @@
             </div>
 
             <!-- Image -->
-            <div id="soc-img" class="anim-right">
+            <div id="soc-img">
                 <div class="relative">
                     <div class="absolute -inset-6 bg-sky-brand/8 rounded-3xl blur-3xl"></div>
-                    <img src="contendio/imagenes/cartonagua.png"
+                    <img src="contendio/imagenes/cartonagua.jpg"
                          alt="Caja de Agua Yana Yacu para distribuidores y socios comerciales"
                          loading="lazy"
                          class="relative z-10 w-full rounded-3xl object-contain"
@@ -1040,7 +948,7 @@
 
                 <!-- Contact details -->
                 <div class="space-y-5 mb-10">
-                    <div class="flex items-center gap-4">
+                    <div class="con-item flex items-center gap-4">
                         <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
                              style="background:rgba(91,184,232,0.1); border:1px solid rgba(91,184,232,0.2);">
                             <span class="text-lg">📞</span>
@@ -1052,7 +960,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="flex items-center gap-4">
+                    <div class="con-item flex items-center gap-4">
                         <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
                              style="background:rgba(91,184,232,0.1); border:1px solid rgba(91,184,232,0.2);">
                             <span class="text-lg">✉️</span>
@@ -1064,7 +972,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="flex items-center gap-4">
+                    <div class="con-item flex items-center gap-4">
                         <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
                              style="background:rgba(91,184,232,0.1); border:1px solid rgba(91,184,232,0.2);">
                             <span class="text-lg">📍</span>
@@ -1074,7 +982,7 @@
                             <div class="text-white font-semibold">Calle Pedro Ortega MZ i Lote C11 - Urb. Chacupe, Distrito La Victoria, Chiclayo, Lambayeque</div>
                         </div>
                     </div>
-                    <div class="flex items-center gap-4">
+                    <div class="con-item flex items-center gap-4">
                         <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
                              style="background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.2);">
                             <span class="text-lg">💬</span>
@@ -1181,7 +1089,7 @@
 
     <!-- Main footer -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+        <div id="footer-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
 
             <!-- Brand -->
             <div class="lg:col-span-1">
@@ -1301,9 +1209,32 @@
 
 
 <!-- ============================================================
+     MODAL PRODUCTO
+============================================================ -->
+<div id="product-modal" class="fixed inset-0 z-[300] hidden flex items-center justify-center p-4">
+    <div class="absolute inset-0" onclick="closeProductModal()"></div>
+    <div id="modal-box" class="relative z-10 w-full max-w-md rounded-3xl p-8"
+         style="background:rgba(10,21,64,0.97); border:1px solid rgba(91,184,232,0.35); box-shadow:0 30px 80px rgba(0,0,0,0.6);">
+
+        <!-- Close -->
+        <button onclick="closeProductModal()"
+                class="absolute top-4 right-4 w-9 h-9 rounded-full flex items-center justify-center text-white/50 hover:text-white transition-colors"
+                style="background:rgba(255,255,255,0.06);">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+        </button>
+
+        <!-- Dynamic content -->
+        <div id="modal-inner"></div>
+    </div>
+</div>
+
+
+<!-- ============================================================
      WHATSAPP FLOTANTE
 ============================================================ -->
-<a href="https://wa.me/51974667498" target="_blank"
+<a id="wa-btn" href="https://wa.me/51974667498" target="_blank"
    class="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full flex items-center justify-center shadow-xl transition-all duration-300 hover:scale-110"
    style="background:#25D366; box-shadow: 0 4px 20px rgba(37,211,102,0.45);"
    title="WhatsApp Yana Yacu">
@@ -1317,8 +1248,104 @@
      SCRIPTS
 ============================================================ -->
 <script>
-    // ── Register ScrollTrigger ──────────────────────────────────
     gsap.registerPlugin(ScrollTrigger);
+
+    // ── PRODUCT DATA ───────────────────────────────────────────
+    const PRODUCTS = {
+        essential: {
+            name: 'Essential', line: 'Línea Essential',
+            badge: 'pH 6.0', badgeStyle: 'background:linear-gradient(135deg,#5BB8E8,#1A2D6E);color:#fff;',
+            img: 'contendio/imagenes/essencial.jpeg',
+            tagline: 'Hidratación diaria para toda la familia',
+            desc: 'Yana Yacu Essential es el agua de mesa ideal para el consumo familiar cotidiano. Con un pH neutro de 6.0 y un proceso de purificación certificado, ofrece equilibrio y ligereza en cada sorbo.',
+            features: ['Hidratación diaria familiar', 'Sabor equilibrado y suave', 'Registro Sanitario DIGESA', 'pH neutro 6.0', 'Sin conservantes ni aditivos', 'Proceso de purificación certificado'],
+            extra: 'Disponible en presentaciones de 600 ml, 1 L, 2.5 L y bidón 20 L.'
+        },
+        premium: {
+            name: 'Premium Alcalina', line: 'Línea Premium',
+            badge: 'pH 8.5+', badgeStyle: 'background:linear-gradient(135deg,#B8E0F7,#5BB8E8);color:#0A1540;',
+            img: 'contendio/imagenes/Botella Premium.jpeg',
+            tagline: 'Alcalina para tu bienestar celular',
+            desc: 'El agua Premium Alcalina neutraliza la acidez del organismo y potencia la vitalidad celular. Formulada para quienes buscan un estilo de vida de alto bienestar.',
+            features: ['Neutraliza la acidez corporal', 'Vitalidad celular aumentada', 'pH 8.5+ comprobado', 'Propiedad antioxidante', 'Micro-cluster molecular', 'Ideal para deportistas y salud'],
+            extra: 'La más popular de nuestra línea. Disponible en 600 ml y 1 L.'
+        },
+        performance: {
+            name: 'Performance', line: 'Línea Performance',
+            badge: '⚡', badgeStyle: 'background:linear-gradient(135deg,#1A2D6E,#0A1540);border:2px solid #5BB8E8;color:#fff;',
+            img: 'contendio/imagenes/bidon.jpg',
+            tagline: 'Electrolitos para el alto rendimiento',
+            desc: 'Diseñada para atletas y personas activas, Yana Yacu Performance repone los electrolitos esenciales con una fórmula balanceada para maximizar la recuperación muscular.',
+            features: ['Electrolitos balanceados', 'Recuperación rápida post-ejercicio', 'Sodio, Potasio y Magnesio', 'Sin azúcares añadidos', 'Hidratación sostenida y profunda', 'Para alto rendimiento deportivo'],
+            extra: 'Disponible en presentación de 500 ml y bidón 20 L.'
+        },
+        rkuperat: {
+            name: 'R-Kuperat', line: 'Línea R-Kuperat',
+            badge: '💧', badgeStyle: 'background:linear-gradient(135deg,#0f4c1a,#1a7a2e);border:2px solid #4ade80;color:#fff;',
+            img: 'contendio/imagenes/r-kuperat.jpg',
+            tagline: 'Rehidratación inmediata y efectiva',
+            desc: 'R-Kuperat es nuestra bebida rehidratante formulada con sales minerales esenciales para una recuperación rápida. Perfecta tras el esfuerzo físico o en situaciones de deshidratación.',
+            features: ['Sales minerales esenciales', 'Rehidratación inmediata', 'Ideal tras esfuerzo físico', 'Fórmula de recuperación rápida', 'Sin colorantes artificiales', 'Registro Sanitario DIGESA'],
+            extra: 'Disponible en presentación de 500 ml.'
+        }
+    };
+
+    // ── MARQUEE infinito (sin pausa en hover) ──────────────────
+    const mTrack = document.querySelector('.marquee-track');
+    mTrack.innerHTML += mTrack.innerHTML;
+    const mHalf = mTrack.scrollWidth / 2;
+    gsap.to(mTrack, { x: -mHalf, duration: 22, ease: 'none', repeat: -1 });
+
+    // ── MODAL producto ─────────────────────────────────────────
+    function openProductModal(key) {
+        const p = PRODUCTS[key];
+        document.getElementById('modal-inner').innerHTML = `
+            <div class="flex items-center gap-4 mb-6">
+                <div class="ph-badge flex-shrink-0" style="${p.badgeStyle}">${p.badge}</div>
+                <div>
+                    <div class="text-sky-brand text-[10px] font-bold uppercase tracking-widest">${p.line}</div>
+                    <h3 class="text-2xl font-black text-white leading-tight">${p.name}</h3>
+                </div>
+            </div>
+            <div class="flex justify-center mb-5" style="height:160px;">
+                <img src="${p.img}" alt="${p.name}" class="h-full w-auto object-contain drop-shadow-2xl">
+            </div>
+            <p class="text-sky-brand font-semibold text-sm mb-2">${p.tagline}</p>
+            <p class="text-white/60 text-sm leading-relaxed mb-5">${p.desc}</p>
+            <ul class="space-y-2 mb-5">
+                ${p.features.map(f => `
+                <li class="flex items-center gap-2 text-white/75 text-sm">
+                    <span class="w-1.5 h-1.5 rounded-full bg-sky-brand flex-shrink-0"></span>${f}
+                </li>`).join('')}
+            </ul>
+            <div class="text-white/35 text-xs mb-6 border-t border-white/10 pt-4">${p.extra}</div>
+            <button onclick="scrollToContact();closeProductModal();"
+                    class="btn-primary w-full py-3 rounded-2xl text-white font-black text-sm">
+                Pedir ahora
+            </button>`;
+        const modal = document.getElementById('product-modal');
+        modal.classList.remove('hidden');
+        gsap.fromTo('#modal-box',
+            { scale: 0.82, opacity: 0, y: 40 },
+            { scale: 1,    opacity: 1, y: 0,  duration: 0.45, ease: 'back.out(1.8)' }
+        );
+    }
+    function closeProductModal() {
+        gsap.to('#modal-box', {
+            scale: 0.88, opacity: 0, y: 20, duration: 0.25, ease: 'power2.in',
+            onComplete: () => document.getElementById('product-modal').classList.add('hidden')
+        });
+    }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeProductModal(); });
+
+    // ── SCROLL PROGRESS BAR ────────────────────────────────────
+    gsap.to('#progress-bar', {
+        scaleX: 1, ease: 'none',
+        scrollTrigger: { trigger: 'body', start: 'top top', end: 'bottom bottom', scrub: 0 }
+    });
+
+    // ── NAVBAR entrance (on load) ──────────────────────────────
+    gsap.from('#navbar', { y: -90, opacity: 0, duration: 1, ease: 'power3.out' });
 
     // ── NAVBAR scroll effect ───────────────────────────────────
     const navbar = document.getElementById('navbar');
@@ -1327,11 +1354,10 @@
     }, { passive: true });
 
     // ── Mobile menu ────────────────────────────────────────────
-    const menuBtn   = document.getElementById('menu-btn');
+    const menuBtn    = document.getElementById('menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
-    const iconOpen  = document.getElementById('icon-open');
-    const iconClose = document.getElementById('icon-close');
-
+    const iconOpen   = document.getElementById('icon-open');
+    const iconClose  = document.getElementById('icon-close');
     menuBtn.addEventListener('click', () => {
         const open = mobileMenu.classList.toggle('hidden');
         iconOpen.classList.toggle('hidden', !open);
@@ -1345,66 +1371,77 @@
         });
     });
 
-    // ── HERO — on load ─────────────────────────────────────────
-    gsap.set('.hero-bottle-wrap', { opacity: 0 });
-    const heroTl = gsap.timeline({ delay: 0.25 });
-    heroTl
-        .to('.hero-fade', {
-            opacity: 1, y: 0,
-            duration: 0.8, stagger: 0.14,
-            ease: 'power3.out'
-        })
-        .to('.hero-bottle-wrap', {
-            opacity: 1,
-            duration: 0.9, ease: 'power3.out'
-        }, '-=0.55')
-        .to('#b-ph', {
-            opacity: 1, x: 0,
-            duration: 0.6, ease: 'back.out(1.7)'
-        }, '-=0.35')
-        .to('#b-nat', {
-            opacity: 1, x: 0,
-            duration: 0.6, ease: 'back.out(1.7)'
-        }, '-=0.4');
+    // ── HERO orbs infinite drift ───────────────────────────────
+    gsap.to('#orb-1', { x: 45, y: -30, duration: 7,  ease: 'sine.inOut', yoyo: true, repeat: -1 });
+    gsap.to('#orb-2', { x: -40, y: 25, duration: 9,  ease: 'sine.inOut', yoyo: true, repeat: -1, delay: 1.5 });
 
-    // Hero bottle parallax
-    gsap.to('#hero-bottle', {
-        y: -70, ease: 'none',
-        scrollTrigger: {
-            trigger: '#inicio',
-            start: 'top top',
-            end:   'bottom top',
-            scrub: 1.2
-        }
+    // ── HERO mouse parallax on orbs ────────────────────────────
+    document.getElementById('inicio').addEventListener('mousemove', (e) => {
+        const xP = (e.clientX / window.innerWidth  - 0.5) * 55;
+        const yP = (e.clientY / window.innerHeight - 0.5) * 35;
+        gsap.to('#orb-1', { x: xP * 0.8,  y: yP * 0.8,  duration: 2,   ease: 'power2.out', overwrite: 'auto' });
+        gsap.to('#orb-2', { x: -xP * 0.6, y: -yP * 0.6, duration: 2.5, ease: 'power2.out', overwrite: 'auto' });
     });
 
-    // ── STATS counters ─────────────────────────────────────────
-    document.querySelectorAll('.stat-item').forEach(item => {
+    // ── HERO video zoom on scroll ──────────────────────────────
+    gsap.to('#inicio video', {
+        scale: 1.14, ease: 'none',
+        scrollTrigger: { trigger: '#inicio', start: 'top top', end: 'bottom top', scrub: 1.5 }
+    });
+
+    // ── WHATSAPP button entrance ───────────────────────────────
+    gsap.from('#wa-btn', { scale: 0, opacity: 0, duration: 0.8, delay: 2.5, ease: 'back.out(2.5)' });
+
+    // ── STATS entrance + counters ──────────────────────────────
+    document.querySelectorAll('.stat-item').forEach((item, i) => {
+        gsap.fromTo(item,
+            { opacity: 0, y: 40 },
+            { opacity: 1, y: 0, duration: 0.7, delay: i * 0.12, ease: 'power3.out',
+              scrollTrigger: { trigger: item, start: 'top 88%', once: true } }
+        );
         const numEl  = item.querySelector('.count-num');
         const target = parseInt(numEl.dataset.target, 10);
         const valEl  = numEl.querySelector('.count-val') || numEl;
-
         const obj = { value: 0 };
         gsap.to(obj, {
             value: target, duration: 2.2, ease: 'power2.out',
             onUpdate() { valEl.textContent = Math.round(obj.value); },
-            scrollTrigger: {
-                trigger: item, start: 'top 88%', once: true
-            }
+            scrollTrigger: { trigger: item, start: 'top 88%', once: true }
         });
     });
+
+    // ── LEYENDA título + quote — scroll sincronizado ──────────
+    const leyendaRevealTl = gsap.timeline({
+        scrollTrigger: {
+            trigger: '#leyenda',
+            start: 'top 65%',
+            end:   'top 5%',
+            scrub: 1.5,
+        }
+    });
+    leyendaRevealTl
+        .from('#leyenda-title', { y: 130, opacity: 0, ease: 'none' }, 0)
+        .from('#leyenda-quote', { y: -130, opacity: 0, ease: 'none' }, '<');
+
+    // ── LEYENDA cards — colisión controlada por scroll ────────
+    const leyendaTl = gsap.timeline({
+        scrollTrigger: {
+            trigger: '#yana-card',
+            start: 'top 90%',
+            end:   'center center',
+            scrub: 1.5,
+        }
+    });
+    leyendaTl
+        .from('#yana-card', { x: -700, opacity: 0, ease: 'none' }, 0)
+        .from('#yacu-card', { x:  700, opacity: 0, ease: 'none' }, '<');
 
     // ── LEYENDA parallax + reveals ─────────────────────────────
     gsap.to('#leyenda-bg img', {
         y: -55, ease: 'none',
-        scrollTrigger: {
-            trigger: '#leyenda',
-            start: 'top bottom', end: 'bottom top',
-            scrub: 1
-        }
+        scrollTrigger: { trigger: '#leyenda', start: 'top bottom', end: 'bottom top', scrub: 1 }
     });
-
-    gsap.utils.toArray('#leyenda .anim-up').forEach((el, i) => {
+    gsap.utils.toArray('#leyenda .anim-up').forEach(el => {
         gsap.fromTo(el,
             { opacity: 0, y: 55 },
             { opacity: 1, y: 0, duration: 0.85, ease: 'power3.out',
@@ -1412,59 +1449,95 @@
         );
     });
 
-    // ── PRODUCTS cards stagger ─────────────────────────────────
+    // ── PRODUCTS header stagger ────────────────────────────────
     gsap.utils.toArray('#productos .anim-up').forEach((el, i) => {
         gsap.fromTo(el,
-            { opacity: 0, y: 65 },
-            { opacity: 1, y: 0, duration: 0.8, delay: i * 0.04,
-              ease: 'power3.out',
+            { opacity: 0, y: 55 },
+            { opacity: 1, y: 0, duration: 0.8, delay: i * 0.1, ease: 'power3.out',
               scrollTrigger: { trigger: el, start: 'top 88%', once: true } }
         );
     });
 
-    // ── VIDEO BOX scale in ─────────────────────────────────────
-    gsap.fromTo('#vid-box',
-        { opacity: 0, scale: 0.93 },
-        { opacity: 1, scale: 1, duration: 1.1, ease: 'power3.out',
-          scrollTrigger: { trigger: '#vid-box', start: 'top 80%', once: true } }
+    // ── PH BADGES spin entrance ────────────────────────────────
+    gsap.utils.toArray('.ph-badge').forEach((badge, i) => {
+        gsap.fromTo(badge,
+            { scale: 0, rotation: -180, opacity: 0 },
+            { scale: 1, rotation: 0, opacity: 1, duration: 0.9, ease: 'back.out(2)',
+              scrollTrigger: { trigger: badge, start: 'top 88%', once: true } }
+        );
+    });
+
+    // ── PH BADGES continuous glow pulse ───────────────────────
+    gsap.to('.ph-badge', {
+        boxShadow: '0 0 32px rgba(91,184,232,0.8)',
+        duration: 1.8, ease: 'sine.inOut', yoyo: true, repeat: -1, stagger: 0.45
+    });
+
+    // ── PUREZA section header (fix: anim-up orphan) ───────────
+    gsap.fromTo('#pureza-header',
+        { opacity: 0, y: 55 },
+        { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out',
+          scrollTrigger: { trigger: '#pureza-header', start: 'top 84%', once: true } }
     );
 
-    // ── BENEFITS left/right slide ──────────────────────────────
-    gsap.fromTo('#ben-img',
-        { opacity: 0, x: -65 },
-        { opacity: 1, x: 0, duration: 1, ease: 'power3.out',
-          scrollTrigger: { trigger: '#beneficios', start: 'top 72%', once: true } }
-    );
-    gsap.fromTo('#ben-txt',
-        { opacity: 0, x: 65 },
-        { opacity: 1, x: 0, duration: 1, ease: 'power3.out',
-          scrollTrigger: { trigger: '#beneficios', start: 'top 72%', once: true } }
-    );
+    // ── POST images — colisión controlada por scroll ──────────
+    const postTl = gsap.timeline({
+        scrollTrigger: {
+            trigger: '#vid-box',
+            start: 'top 90%',
+            end:   'center center',
+            scrub: 1.5,
+        }
+    });
+    postTl
+        .from('#post-1', { x: -700, opacity: 0, ease: 'none' }, 0)
+        .from('#post-2', { x:  700, opacity: 0, ease: 'none' }, '<');
+
+    // ── BENEFITS slide sincronizado con scroll ─────────────────
+    const benefTl = gsap.timeline({
+        scrollTrigger: {
+            trigger: '#beneficios',
+            start: 'top 65%',
+            end:   'top 5%',
+            scrub: 1.5,
+        }
+    });
+    benefTl
+        .from('#ben-img', { x: -700, opacity: 0, ease: 'none' }, 0)
+        .from('#ben-txt', { x:  700, opacity: 0, ease: 'none' }, '<');
+
     gsap.utils.toArray('.ben-item').forEach((el, i) => {
         gsap.fromTo(el,
-            { opacity: 0, x: 30 },
-            { opacity: 1, x: 0, duration: 0.6, delay: i * 0.12,
-              ease: 'power3.out',
+            { opacity: 0, x: 35 },
+            { opacity: 1, x: 0, duration: 0.6, delay: i * 0.12, ease: 'power3.out',
               scrollTrigger: { trigger: el, start: 'top 88%', once: true } }
         );
     });
 
-    // ── B2B left/right slide ───────────────────────────────────
-    gsap.fromTo('#soc-txt',
-        { opacity: 0, x: -65 },
-        { opacity: 1, x: 0, duration: 1, ease: 'power3.out',
-          scrollTrigger: { trigger: '#socios', start: 'top 72%', once: true } }
+    // ── BENEFITS floating tag bounce ───────────────────────────
+    gsap.fromTo('#ben-tag',
+        { scale: 0, opacity: 0, rotation: -15 },
+        { scale: 1, opacity: 1, rotation: 0, duration: 0.8, ease: 'back.out(2.5)',
+          scrollTrigger: { trigger: '#beneficios', start: 'top 60%', once: true } }
     );
-    gsap.fromTo('#soc-img',
-        { opacity: 0, x: 65 },
-        { opacity: 1, x: 0, duration: 1, ease: 'power3.out',
-          scrollTrigger: { trigger: '#socios', start: 'top 72%', once: true } }
-    );
+
+    // ── B2B slide sincronizado con scroll ─────────────────────
+    const socTl = gsap.timeline({
+        scrollTrigger: {
+            trigger: '#socios',
+            start: 'top 65%',
+            end:   'top 5%',
+            scrub: 1.5,
+        }
+    });
+    socTl
+        .from('#soc-txt', { x: -700, opacity: 0, ease: 'none' }, 0)
+        .from('#soc-img', { x:  700, opacity: 0, ease: 'none' }, '<');
+
     gsap.utils.toArray('.soc-item').forEach((el, i) => {
         gsap.fromTo(el,
             { opacity: 0, y: 18 },
-            { opacity: 1, y: 0, duration: 0.45, delay: i * 0.08,
-              ease: 'power2.out',
+            { opacity: 1, y: 0, duration: 0.45, delay: i * 0.08, ease: 'power2.out',
               scrollTrigger: { trigger: el, start: 'top 90%', once: true } }
         );
     });
@@ -1481,6 +1554,55 @@
           scrollTrigger: { trigger: '#contacto', start: 'top 72%', once: true } }
     );
 
+    // ── CONTACT detail items stagger ──────────────────────────
+    gsap.utils.toArray('.con-item').forEach((el, i) => {
+        gsap.fromTo(el,
+            { opacity: 0, x: -30 },
+            { opacity: 1, x: 0, duration: 0.5, delay: i * 0.11, ease: 'power2.out',
+              scrollTrigger: { trigger: el, start: 'top 88%', once: true } }
+        );
+    });
+
+    // ── FOOTER columns stagger ─────────────────────────────────
+    gsap.fromTo('#footer-grid > div',
+        { opacity: 0, y: 50 },
+        { opacity: 1, y: 0, duration: 0.7, stagger: 0.13, ease: 'power3.out',
+          scrollTrigger: { trigger: 'footer', start: 'top 85%', once: true } }
+    );
+
+    // ── INTERACTIVE: Magnetic buttons ─────────────────────────
+    document.querySelectorAll('.btn-primary').forEach(btn => {
+        btn.addEventListener('mousemove', (e) => {
+            const r = btn.getBoundingClientRect();
+            const x = (e.clientX - r.left - r.width  / 2) * 0.35;
+            const y = (e.clientY - r.top  - r.height / 2) * 0.35;
+            gsap.to(btn, { x, y, duration: 0.4, ease: 'power2.out' });
+        });
+        btn.addEventListener('mouseleave', () => {
+            gsap.to(btn, { x: 0, y: 0, duration: 0.7, ease: 'elastic.out(1, 0.5)' });
+        });
+    });
+
+    // ── INTERACTIVE: Product cards 3D tilt ────────────────────
+    document.querySelectorAll('.prod-card').forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const r = card.getBoundingClientRect();
+            const x = ((e.clientX - r.left) / r.width  - 0.5) * 16;
+            const y = ((e.clientY - r.top)  / r.height - 0.5) * 16;
+            gsap.to(card, { rotationY: x, rotationX: -y, transformPerspective: 900, duration: 0.4, ease: 'power2.out' });
+        });
+        card.addEventListener('mouseleave', () => {
+            gsap.to(card, { rotationY: 0, rotationX: 0, duration: 0.7, ease: 'power3.out' });
+        });
+    });
+
+    // ── INTERACTIVE: Social icons hover bounce ────────────────
+    document.querySelectorAll('footer a[aria-label]').forEach(icon => {
+        icon.addEventListener('mouseenter', () => {
+            gsap.fromTo(icon, { y: 0 }, { y: -7, duration: 0.22, ease: 'power2.out', yoyo: true, repeat: 1 });
+        });
+    });
+
     // ── FORM handler ───────────────────────────────────────────
     function handleSubmit(e) {
         e.preventDefault();
@@ -1496,12 +1618,12 @@
         document.getElementById('contacto').scrollIntoView({ behavior: 'smooth' });
     }
 
-    // ── VIDEO observer (pause if not visible) ──────────────────
+    // ── VIDEO observer (pause si no es visible) ────────────────
     if ('IntersectionObserver' in window) {
         const vids = document.querySelectorAll('video[autoplay]');
         const io = new IntersectionObserver(entries => {
             entries.forEach(en => {
-                if (en.isIntersecting) en.target.play().catch(()=>{});
+                if (en.isIntersecting) en.target.play().catch(() => {});
                 else en.target.pause();
             });
         }, { threshold: 0.25 });

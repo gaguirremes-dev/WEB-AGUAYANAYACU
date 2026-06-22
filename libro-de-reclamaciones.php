@@ -36,6 +36,10 @@ if (!defined('SMTP_PORT'))           define('SMTP_PORT',           465);
 if (!defined('SMTP_FROM_NAME'))      define('SMTP_FROM_NAME',      'Agua Yana Yacu');
 if (!defined('EMPRESA_NOTIF_EMAIL')) define('EMPRESA_NOTIF_EMAIL', 'reclamaciones@aguayanayacu.com');
 
+// ── hCaptcha — definir en config.smtp.php del servidor (nunca hardcodeadas) ──
+if (!defined('HCAPTCHA_SITE_KEY'))   define('HCAPTCHA_SITE_KEY',   '');
+if (!defined('HCAPTCHA_SECRET_KEY')) define('HCAPTCHA_SECRET_KEY', '');
+
 // ── Rate limiting ─────────────────────────────────────────────────────────────
 define('RATE_LIMIT_MAX',    1);    // máx. envíos exitosos por IP por ventana
 define('RATE_LIMIT_WINDOW', 1800); // 30 minutos
@@ -133,6 +137,21 @@ function logSecurityEvent(string $logFile, string $event, array $context = []): 
     }
     $line = date('Y-m-d H:i:s') . ' | ' . $event . ' | ' . json_encode($context, JSON_UNESCAPED_UNICODE) . PHP_EOL;
     @file_put_contents($logFile, $line, FILE_APPEND | LOCK_EX);
+}
+
+// Verifica el token hCaptcha contra la API del proveedor (llamada server-side)
+function verificarHCaptcha(string $token, string $secretKey): bool {
+    if ($token === '' || $secretKey === '') return false;
+    $ctx = stream_context_create(['http' => [
+        'method'  => 'POST',
+        'header'  => 'Content-Type: application/x-www-form-urlencoded',
+        'content' => http_build_query(['secret' => $secretKey, 'response' => $token]),
+        'timeout' => 10,
+    ]]);
+    $result = @file_get_contents('https://hcaptcha.com/siteverify', false, $ctx);
+    if ($result === false) return false;
+    $data = json_decode($result, true);
+    return isset($data['success']) && $data['success'] === true;
 }
 
 // ── FUNCIÓN: Generar PDF de la hoja de reclamación ───────────────────────────
@@ -398,7 +417,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && empty($errorMsg)) {
         $errorMsg = 'Token de seguridad inválido. Recarga la página e inténtalo de nuevo.';
     }
 
-    // ── 3. Validar Origin / Referer ───────────────────────────────────────────
+    // ── 3. Verificar hCaptcha server-side (antes del rate limiting) ───────────
+    if (empty($errorMsg)) {
+        $captchaToken = (string)($_POST['h-captcha-response'] ?? '');
+        if (!verificarHCaptcha($captchaToken, HCAPTCHA_SECRET_KEY)) {
+            logSecurityEvent($logFile, 'CAPTCHA_FAILED', ['ip' => $clientIP]);
+            $errorMsg = 'Por favor, completa el desafío de seguridad (captcha) antes de enviar.';
+        }
+    }
+
+    // ── 4. Validar Origin / Referer ───────────────────────────────────────────
     if (empty($errorMsg)) {
         $referer   = (string)($_SERVER['HTTP_REFERER'] ?? '');
         $origin    = (string)($_SERVER['HTTP_ORIGIN']  ?? '');
@@ -421,7 +449,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && empty($errorMsg)) {
         }
     }
 
-    // ── 4. Rate limiting: máx. 1 envío exitoso por IP cada 30 minutos ─────────
+    // ── 5. Rate limiting: máx. 1 envío exitoso por IP cada 30 minutos ─────────
     if (empty($errorMsg)) {
         if (!checkAndRegisterRateLimit($clientIP, $rateFile)) {
             logSecurityEvent($logFile, 'RATE_LIMIT_EXCEEDED', ['ip' => $clientIP]);
@@ -429,7 +457,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && empty($errorMsg)) {
         }
     }
 
-    // ── 5. Sanitizar y validar todos los campos ───────────────────────────────
+    // ── 6. Sanitizar y validar todos los campos ───────────────────────────────
     if (empty($errorMsg)) {
 
         // Texto libre: strip_tags + trim + longitud máxima
@@ -481,7 +509,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && empty($errorMsg)) {
         }
     }
 
-    // ── 6. Guardar registro ───────────────────────────────────────────────────
+    // ── 7. Guardar registro ───────────────────────────────────────────────────
     if (empty($errorMsg)) {
         $fp = fopen($lockFile, 'w');
         if ($fp && flock($fp, LOCK_EX)) {
@@ -537,7 +565,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && empty($errorMsg)) {
         if ($fp) fclose($fp);
     }
 
-    // ── 7. Generar PDF y enviar correos ───────────────────────────────────────
+    // ── 8. Generar PDF y enviar correos ───────────────────────────────────────
     if ($success) {
         $pdfBytes = '';
         if ($fpdfAvailable) {
@@ -1130,6 +1158,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && empty($errorMsg)) {
                                 </label>
                             </div>
 
+                            <!-- hCaptcha: verificación humana (server-side) -->
+                            <?php if (defined('HCAPTCHA_SITE_KEY') && HCAPTCHA_SITE_KEY !== ''): ?>
+                            <div class="flex justify-center pt-2">
+                                <div class="h-captcha"
+                                     data-sitekey="<?= esc(HCAPTCHA_SITE_KEY) ?>"
+                                     data-theme="dark"></div>
+                            </div>
+                            <?php else: ?>
+                            <p class="text-amber-400/70 text-[10px] text-center">
+                                ⚠️ hCaptcha no configurado — define <code>HCAPTCHA_SITE_KEY</code> en <code>config.smtp.php</code>.
+                            </p>
+                            <?php endif; ?>
+
                             <button type="submit" id="submitBtn" class="btn-primary w-full py-4 rounded-2xl text-white font-black text-sm tracking-wider cursor-pointer">
                                 PRESENTAR RECLAMACIÓN
                             </button>
@@ -1198,6 +1239,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && empty($errorMsg)) {
         </div>
     </div>
 
+    <?php if (defined('HCAPTCHA_SITE_KEY') && HCAPTCHA_SITE_KEY !== ''): ?>
+    <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+    <?php endif; ?>
+
     <script class="no-print">
         function toggleApoderado() {
             const checkbox     = document.getElementById('menor_edad');
@@ -1234,6 +1279,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && empty($errorMsg)) {
                     }
                 });
             }
+
+            // hCaptcha: resetear widget si la página volvió con un error (el token es de un solo uso)
+            <?php if (!empty($errorMsg)): ?>
+            if (typeof hcaptcha !== 'undefined') {
+                hcaptcha.reset();
+            }
+            <?php endif; ?>
         });
 
         function openNoticeModal() {

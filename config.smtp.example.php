@@ -17,3 +17,7 @@ define('SMTP_FROM_NAME', 'Agua Yana Yacu');
 
 // A dónde llegan las notificaciones internas de nuevos reclamos
 define('EMPRESA_NOTIF_EMAIL', 'correo@tudominio.com');
+
+// ── hCaptcha (Libro de Reclamaciones) ────────────────────────────────────────
+define('HCAPTCHA_SITE_KEY',   'TU_SITE_KEY_AQUI');
+define('HCAPTCHA_SECRET_KEY', 'TU_SECRET_KEY_AQUI');

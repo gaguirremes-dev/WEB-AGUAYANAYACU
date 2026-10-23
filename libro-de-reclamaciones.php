@@ -739,7 +739,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && empty($errorMsg)) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Libro de Reclamaciones - Agua Yana Yacu</title>
     <meta name="description" content="Libro de Reclamaciones Virtual de Agua Yana Yacu. Presenta tus quejas o reclamos conforme al Código de Protección al Consumidor en Perú.">
-    <link rel="icon" type="image/png" href="favicon-32x32.png">
+    <link rel="icon" href="favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -829,9 +831,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && empty($errorMsg)) {
     <header class="no-print w-full border-b border-white/10 bg-navy-deep/80 backdrop-blur-md sticky top-0 z-50">
         <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
             <a href="index.html" class="flex items-center gap-3">
-                <img src="LOGO - AGUA YANA YACU.jpg" alt="Agua Yana Yacu" class="h-10 w-10 rounded-full object-cover">
-                <div>
-                    <div class="text-white font-black text-sm tracking-wide">YANA YACU</div>
+                <img src="contendio/logo/yana-yacu-logo.png" alt="Agua Yana Yacu"
+                     width="636" height="320" class="h-9 w-auto">
+                <div class="hidden sm:block border-l border-white/15 pl-3">
                     <div class="text-sky-brand text-[9px] tracking-widest">CULTURA DE VIDA</div>
                 </div>
             </a>
